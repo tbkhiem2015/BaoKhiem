@@ -22,7 +22,7 @@ const App: React.FC = () => {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-sm font-semibold mb-6">
                 <Award className="w-4 h-4" />
-                Giải Nhất Quốc Gia Tin Học Trẻ
+                Giải Nhất Quốc Gia Tin Học Trẻ 2024
               </div>
               <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
                 Chào bạn, mình là <span className="gradient-text">{PERSONAL_INFO.fullName}</span>
@@ -50,9 +50,13 @@ const App: React.FC = () => {
                 <div className="absolute inset-0 bg-blue-600 rounded-3xl rotate-6 -z-10 opacity-10"></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-sky-500 rounded-3xl -rotate-3 -z-10 shadow-xl shadow-blue-200"></div>
                 <img 
-                  src="https://picsum.photos/seed/boycoder/800/800" 
-                  alt="Trần Bảo Khiêm" 
-                  className="w-full h-full object-cover rounded-3xl shadow-2xl"
+                  src={PERSONAL_INFO.profileImage} 
+                  alt={PERSONAL_INFO.fullName} 
+                  className="w-full h-full object-cover rounded-3xl shadow-2xl border-4 border-white/50"
+                  onError={(e) => {
+                    // Fallback nếu chưa lưu file ảnh kịp
+                    (e.target as HTMLImageElement).src = "https://picsum.photos/seed/boycoder/800/800";
+                  }}
                 />
               </div>
             </div>
@@ -127,7 +131,7 @@ const App: React.FC = () => {
             <div>
               <h2 className="text-3xl font-bold mb-6">Kỹ năng lập trình</h2>
               <p className="text-slate-400 mb-10 leading-relaxed text-lg">
-                Mình bắt đầu làm quen với lập trình từ rất sớm. Hiện tại, mình tập trung vào hai mảng chính là giải thuật và lập trình kéo thả sáng tạo.
+                Mình bắt đầu làm quen với lập trình từ năm 3 tuổi. Hiện tại, mình tập trung vào hai mảng chính là giải thuật và lập trình kéo thả sáng tạo.
               </p>
               <div className="space-y-8">
                 {SKILLS.map((skill) => (
@@ -153,14 +157,14 @@ const App: React.FC = () => {
                   <div className="text-sm text-slate-400">Bảng thi Quốc gia</div>
                 </div>
                 <div className="p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 hover:border-sky-400/50 transition-colors">
-                  <div className="text-3xl font-bold text-sky-400 mb-1">5+</div>
-                  <div className="text-sm text-slate-400">Năm kinh nghiệm</div>
+                  <div className="text-3xl font-bold text-sky-400 mb-1">7+</div>
+                  <div className="text-sm text-slate-400">Năm khám phá</div>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 hover:border-indigo-400/50 transition-colors">
                   <div className="text-3xl font-bold text-indigo-400 mb-1">Top 10</div>
-                  <div className="text-sm text-slate-400">Thứ hạng trong lớp</div>
+                  <div className="text-sm text-slate-400">Học sinh xuất sắc</div>
                 </div>
                 <div className="p-6 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 hover:border-purple-400/50 transition-colors">
                   <div className="text-3xl font-bold text-purple-400 mb-1">3+</div>
@@ -180,8 +184,8 @@ const App: React.FC = () => {
               <h2 className="text-3xl font-bold text-slate-900 mb-2">Dự án của tôi</h2>
               <p className="text-slate-600">Những sản phẩm mình đã tâm huyết xây dựng.</p>
             </div>
-            <a href="#" className="flex items-center gap-2 text-blue-600 font-bold hover:gap-3 transition-all group">
-              Xem tất cả trên GitHub <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <a href="https://scratch.mit.edu/users/Khiemchoigame2015/" target="_blank" className="flex items-center gap-2 text-blue-600 font-bold hover:gap-3 transition-all group">
+              Xem thêm trên Scratch <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -236,6 +240,8 @@ const App: React.FC = () => {
                   <a 
                     key={item.id} 
                     href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center justify-between p-5 bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all group"
                   >
                     <div>
@@ -290,7 +296,7 @@ const App: React.FC = () => {
           </p>
           <div className="flex justify-center gap-6">
             <a href="#" className="text-slate-400 hover:text-blue-600 transition-colors transform hover:scale-110"><Code className="w-5 h-5" /></a>
-            <a href="#" className="text-slate-400 hover:text-red-600 transition-colors transform hover:scale-110"><Youtube className="w-5 h-5" /></a>
+            <a href="https://www.youtube.com/@KhiemSonic" className="text-slate-400 hover:text-red-600 transition-colors transform hover:scale-110"><Youtube className="w-5 h-5" /></a>
             <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors transform hover:scale-110"><MessageSquare className="w-5 h-5" /></a>
           </div>
         </div>
