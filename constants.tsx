@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Project, Achievement, MediaMention, YoutubeChannel } from './types';
-import { Award, Code, Globe, MessageSquare, Youtube, MapPin, Calendar, School, BookOpen, Users } from 'lucide-react';
+import { Award, Code, Youtube, MapPin, Calendar, School, BookOpen, Users } from 'lucide-react';
 
 export const PERSONAL_INFO = {
   fullName: "Trần Bảo Khiêm",
@@ -9,7 +9,7 @@ export const PERSONAL_INFO = {
   location: "Bình Đức, Long Xuyên, An Giang",
   school: "Lớp 5, trường Phổ thông Thực hành Sư phạm - Đại học An Giang",
   bio: "Lập trình viên nhí đam mê sáng tạo nội dung và giải thuật. Luôn khát khao chia sẻ kiến thức công nghệ đến bạn bè cùng trang lứa.",
-  profileImage: "/profile.jpg" // Khiêm hãy lưu ảnh nhận giải tên là profile.jpg nhé
+  profileImage: "/profile.jpg" 
 };
 
 export const PROJECTS: Project[] = [
@@ -18,21 +18,21 @@ export const PROJECTS: Project[] = [
     title: "Hành trình xanh",
     description: "Dự án về giáo dục môi trường và bảo vệ trái đất thông qua các trò chơi tương tác.",
     tags: ["Scratch", "Environment"],
-    image: "https://picsum.photos/seed/greenjourney/800/600"
+    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: "2",
     title: "Vui học Tiếng Việt lớp 1",
     description: "Ứng dụng hỗ trợ học chữ cái và vần Tiếng Việt cho các bạn bắt đầu vào lớp 1.",
     tags: ["Education", "Scratch"],
-    image: "https://picsum.photos/seed/vietnamese/800/600"
+    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=800&auto=format&fit=crop"
   },
   {
     id: "3",
     title: "ShineAI",
     description: "Dự án khám phá trí tuệ nhân tạo dành cho học sinh tiểu học.",
     tags: ["AI", "Creative"],
-    image: "https://picsum.photos/seed/shineai/800/600"
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop"
   }
 ];
 
