@@ -9,7 +9,7 @@ export const PERSONAL_INFO = {
   location: "Bình Đức, Long Xuyên, An Giang",
   school: "Lớp 5, trường Phổ thông Thực hành Sư phạm - Đại học An Giang",
   bio: "Lập trình viên nhí đam mê sáng tạo nội dung và giải thuật. Luôn khát khao chia sẻ kiến thức công nghệ đến bạn bè cùng trang lứa.",
-  profileImage: "https://tainangviet.vn/source/image/DMG06540.jpg" 
+  profileImage: "/profile.jpg" // Khiêm hãy lưu ảnh em gửi tên là profile.jpg nhé
 };
 
 export const PROJECTS: Project[] = [
@@ -62,7 +62,7 @@ export const MEDIA: MediaMention[] = [
     id: "m2", 
     source: "Báo An Giang", 
     title: "Cậu bé 10 tuổi ấp ủ niềm đam mê lập trình", 
-    link: "https://baoangiang.com.vn/cau-be-10-tuoi-ap-u-niem-dam-me-lap-trinh-a461191.html" 
+    link: "https://baoangiang.com.vn/cau-be-10-tuoi-ap-u- niềm-dam-me-lap-trinh-a461191.html" 
   },
   { 
     id: "m4", 
