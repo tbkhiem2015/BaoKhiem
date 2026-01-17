@@ -9,7 +9,7 @@ export const PERSONAL_INFO = {
   location: "Bình Đức, Long Xuyên, An Giang",
   school: "Lớp 5, trường Phổ thông Thực hành Sư phạm - Đại học An Giang",
   bio: "Lập trình viên nhí đam mê sáng tạo nội dung và giải thuật. Luôn khát khao chia sẻ kiến thức công nghệ đến bạn bè cùng trang lứa.",
-  profileImage: "/profile.jpg" // Khiêm hãy lưu ảnh em gửi tên là profile.jpg nhé
+  profileImage: "https://tainangviet.vn/source/image/DMG06540.jpg" // Khiêm hãy lưu ảnh em gửi tên là profile.jpg nhé
 };
 
 export const PROJECTS: Project[] = [
