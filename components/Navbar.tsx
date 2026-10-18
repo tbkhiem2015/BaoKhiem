@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Language } from '../types';
 import { UI_TRANSLATIONS } from '../constants';
 import { Menu, X, Globe } from 'lucide-react';
+import BrandLogo from './BrandLogo';
 
 interface NavbarProps {
   lang: Language;
@@ -25,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ lang, onLanguageChange }) => {
   const navItems = [
     { name: t.nav.about, href: 'about' },
     { name: t.nav.achievements, href: 'achievements' },
+    { name: t.nav.awards, href: 'awards' },
     { name: t.nav.skills, href: 'skills' },
     { name: t.nav.projects, href: 'projects' },
     { name: t.nav.community, href: 'community' },
@@ -55,22 +57,11 @@ const Navbar: React.FC<NavbarProps> = ({ lang, onLanguageChange }) => {
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Brand Logo */}
-        <div 
-          className="flex items-center gap-2 cursor-pointer select-none" 
+        <BrandLogo 
+          size="md"
+          subtitleText={lang === 'vi' ? 'Lập trình viên nhí' : 'Junior Coder'}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        >
-          <div className="w-10 h-10 bg-gradient-to-tr from-blue-700 to-blue-500 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-blue-200">
-            K
-          </div>
-          <div className="leading-tight">
-            <span className="font-extrabold text-base sm:text-lg block text-slate-900 tracking-tight">
-              Trần Bảo Khiêm
-            </span>
-            <span className="text-[10px] font-bold text-blue-600 block uppercase tracking-wider">
-              {lang === 'vi' ? 'Lập trình viên nhí' : 'Junior Coder'}
-            </span>
-          </div>
-        </div>
+        />
 
         {/* Desktop Nav Items */}
         <div className="hidden lg:flex items-center gap-6">

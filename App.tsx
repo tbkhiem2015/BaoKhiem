@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './components/Navbar';
 import ProjectCard from './components/ProjectCard';
 import ProjectDocModal from './components/ProjectDocModal';
+import AwardModal from './components/AwardModal';
+import BrandLogo from './components/BrandLogo';
+import LogoModal from './components/LogoModal';
 import { 
   PERSONAL_INFO, 
   ACHIEVEMENTS, 
+  CERTIFICATES,
   PROJECTS, 
   SKILLS, 
   MEDIA, 
@@ -12,7 +16,7 @@ import {
   UI_TRANSLATIONS,
   getLocalizedText 
 } from './constants';
-import { Language, Project } from './types';
+import { Language, Project, Certificate } from './types';
 import { 
   Award, 
   Code, 
@@ -26,7 +30,17 @@ import {
   ChevronRight, 
   MessageSquare, 
   Star, 
-  Trophy 
+  Trophy,
+  Medal,
+  FileCheck,
+  Check,
+  Copy,
+  Sparkles,
+  ShieldCheck,
+  Camera,
+  Eye,
+  Download,
+  Upload
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -34,9 +48,91 @@ const App: React.FC = () => {
     const saved = localStorage.getItem('khiem_lang');
     return saved === 'en' ? 'en' : 'vi';
   });
-  const [yearFilter, setYearFilter] = useState<'all' | '2026' | '2025'>('all');
+  const [yearFilter, setYearFilter] = useState<'all' | '2026' | '2025' | '2024'>('all');
   const [selectedProjectDoc, setSelectedProjectDoc] = useState<Project | null>(null);
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
+
+  // Awards / Khen thưởng state
+  const [awardLevelFilter, setAwardLevelFilter] = useState<'all' | 'national' | 'regional' | 'provincial'>('all');
+  const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+  const [isCertModalOpen, setIsCertModalOpen] = useState(false);
+  const [copiedCertId, setCopiedCertId] = useState<string | null>(null);
+  const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
+
+  // Real Certificate Photos Map from LocalStorage
+  const [customCertImages, setCustomCertImages] = useState<Record<string, string>>(() => {
+    const map: Record<string, string> = {};
+    CERTIFICATES.forEach((c) => {
+      const saved = localStorage.getItem(`cert_img_${c.id}`);
+      if (saved) map[c.id] = saved;
+    });
+    return map;
+  });
+
+  const batchUploadRef = useRef<HTMLInputElement>(null);
+  const [batchToast, setBatchToast] = useState<string | null>(null);
+
+  const handleUpdateCertImage = (certId: string, imageSrc: string) => {
+    setCustomCertImages((prev) => {
+      const updated = { ...prev };
+      if (imageSrc) {
+        updated[certId] = imageSrc;
+      } else {
+        delete updated[certId];
+      }
+      return updated;
+    });
+  };
+
+  const handleBatchUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    
+    let processed = 0;
+    const fileList = Array.from(files);
+
+    fileList.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        const cleanName = file.name.trim();
+        const matched = CERTIFICATES.find(c => 
+          c.imageUrl && (
+            c.imageUrl.includes(cleanName) || 
+            cleanName.includes(c.imageUrl.replace(/^\//, ''))
+          )
+        );
+
+        if (matched) {
+          localStorage.setItem(`cert_img_${matched.id}`, dataUrl);
+          setCustomCertImages(prev => ({ ...prev, [matched.id]: dataUrl }));
+        } else {
+          const unassigned = CERTIFICATES.find(c => !localStorage.getItem(`cert_img_${c.id}`));
+          if (unassigned) {
+            localStorage.setItem(`cert_img_${unassigned.id}`, dataUrl);
+            setCustomCertImages(prev => ({ ...prev, [unassigned.id]: dataUrl }));
+          }
+        }
+        processed++;
+        if (processed === fileList.length) {
+          setBatchToast(lang === 'vi' ? `Đã nạp ${processed} ảnh bằng khen thành công!` : `Successfully loaded ${processed} certificate photos!`);
+          setTimeout(() => setBatchToast(null), 4000);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleOpenCertModal = (cert: Certificate) => {
+    setSelectedCert(cert);
+    setIsCertModalOpen(true);
+  };
+
+  const handleCopyCode = (code: string, id: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCertId(id);
+    setTimeout(() => setCopiedCertId(null), 2000);
+  };
 
   const handleOpenProjectDoc = (project: Project) => {
     setSelectedProjectDoc(project);
@@ -49,6 +145,11 @@ const App: React.FC = () => {
   };
 
   const t = UI_TRANSLATIONS[lang];
+
+  const filteredCertificates = CERTIFICATES.filter((cert) => {
+    if (awardLevelFilter === 'all') return true;
+    return cert.badgeType === awardLevelFilter;
+  });
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-800">
@@ -195,6 +296,17 @@ const App: React.FC = () => {
               >
                 {t.achievements.tab2025}
               </button>
+              <button
+                type="button"
+                onClick={() => setYearFilter('2024')}
+                className={`px-5 py-2.5 rounded-2xl font-bold text-sm transition-all cursor-pointer ${
+                  yearFilter === '2024'
+                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-200 scale-105'
+                    : 'bg-white text-slate-600 hover:text-sky-600 border border-slate-200'
+                }`}
+              >
+                {t.achievements.tab2024}
+              </button>
             </div>
           </div>
 
@@ -216,7 +328,7 @@ const App: React.FC = () => {
                           {t.achievements.latestTag}
                         </span>
                       </div>
-                      <p className="text-slate-500 text-sm font-medium">Hội thi Tin Học Trẻ Toàn Quốc 2026</p>
+                      <p className="text-slate-500 text-sm font-medium">Hội thi Tin Học Trẻ Toàn Quốc & Khu vực 2026</p>
                     </div>
                   </div>
                   <span className="px-4 py-1.5 bg-indigo-100 text-indigo-800 font-black rounded-full text-xs">
@@ -227,11 +339,16 @@ const App: React.FC = () => {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {ACHIEVEMENTS.filter(item => item.year === '2026').map((item) => {
                     const isFirstPrize = item.id.includes('d2-tinh');
+                    const isThirdPrize = item.id.includes('d2-kk');
                     return (
                       <div 
                         key={item.id} 
                         className={`p-7 sm:p-8 bg-white border-2 rounded-[2.5rem] shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden flex flex-col justify-between ${
-                          isFirstPrize ? 'border-amber-300/80 ring-1 ring-amber-200/50' : 'border-indigo-100 hover:border-indigo-300'
+                          isFirstPrize 
+                            ? 'border-amber-300/80 ring-1 ring-amber-200/50' 
+                            : isThirdPrize
+                            ? 'border-orange-300/80 ring-1 ring-orange-200/50'
+                            : 'border-indigo-100 hover:border-indigo-300'
                         }`}
                       >
                         <Trophy className="absolute -bottom-6 -right-6 w-32 h-32 text-indigo-50/70 group-hover:text-indigo-100/70 transition-colors pointer-events-none" />
@@ -240,11 +357,19 @@ const App: React.FC = () => {
                           <div className="flex justify-between items-start gap-3 mb-5">
                             <div className="flex items-center gap-3">
                               <Award className={`w-12 h-12 p-2.5 rounded-2xl group-hover:scale-110 transition-transform ${
-                                isFirstPrize ? 'text-amber-600 bg-amber-50' : 'text-indigo-600 bg-indigo-50'
+                                isFirstPrize 
+                                  ? 'text-amber-600 bg-amber-50' 
+                                  : isThirdPrize
+                                  ? 'text-orange-600 bg-orange-50'
+                                  : 'text-indigo-600 bg-indigo-50'
                               }`} />
                               <div>
                                 <span className={`inline-block px-3 py-0.5 font-black rounded-lg text-xs uppercase tracking-wider ${
-                                  isFirstPrize ? 'bg-amber-600 text-white' : 'bg-indigo-600 text-white'
+                                  isFirstPrize 
+                                    ? 'bg-amber-600 text-white' 
+                                    : isThirdPrize
+                                    ? 'bg-orange-600 text-white'
+                                    : 'bg-indigo-600 text-white'
                                 }`}>
                                   {item.category}
                                 </span>
@@ -277,7 +402,7 @@ const App: React.FC = () => {
               </div>
             )}
 
-            {/* BẢNG VÀNG 2025 & CÁC NĂM TRƯỚC */}
+            {/* BẢNG VÀNG 2025 */}
             {(yearFilter === 'all' || yearFilter === '2025') && (
               <div className="bg-gradient-to-br from-amber-50/50 via-white to-slate-50/60 p-6 sm:p-10 rounded-[3rem] border border-amber-100 shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -298,7 +423,7 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="grid lg:grid-cols-2 gap-8">
-                  {ACHIEVEMENTS.filter(item => item.year !== '2026').map((item) => (
+                  {ACHIEVEMENTS.filter(item => item.year.includes('2025')).map((item) => (
                     <div 
                       key={item.id} 
                       className="p-8 sm:p-10 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden"
@@ -330,6 +455,359 @@ const App: React.FC = () => {
                 </div>
               </div>
             )}
+
+            {/* BẢNG VÀNG 2024 */}
+            {(yearFilter === 'all' || yearFilter === '2024') && (
+              <div className="bg-gradient-to-br from-sky-50/50 via-white to-slate-50/60 p-6 sm:p-10 rounded-[3rem] border border-sky-100 shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-sky-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
+                      <Award className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                        {t.achievements.board2024Title}
+                      </h3>
+                      <p className="text-slate-500 text-sm font-medium">Hội thi Tin Học Trẻ Tỉnh An Giang 2024</p>
+                    </div>
+                  </div>
+                  <span className="px-4 py-1.5 bg-sky-100 text-sky-800 font-black rounded-full text-xs">
+                    Năm 2024
+                  </span>
+                </div>
+
+                <div className="grid lg:grid-cols-1 gap-8">
+                  {ACHIEVEMENTS.filter(item => item.year === '2024').map((item) => (
+                    <div 
+                      key={item.id} 
+                      className="p-8 sm:p-10 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden"
+                    >
+                      <Trophy className="absolute -bottom-4 -right-4 w-32 h-32 text-slate-50 group-hover:text-sky-50 transition-colors pointer-events-none" />
+                      
+                      <div className="flex justify-between items-start mb-6">
+                        <Award className="w-12 h-12 text-sky-600 p-2.5 bg-sky-50 rounded-2xl group-hover:scale-110 transition-transform" />
+                        <div className="flex items-center gap-2">
+                          {item.category && (
+                            <span className="px-3 py-1 bg-sky-50 text-sky-700 font-black rounded-full text-xs">
+                              {item.category}
+                            </span>
+                          )}
+                          <span className="px-4 py-1 bg-slate-100 text-slate-700 font-black rounded-full text-xs">
+                            {item.year}
+                          </span>
+                        </div>
+                      </div>
+
+                      <h4 className="text-2xl font-black text-slate-900 mb-3 group-hover:text-sky-600 transition-colors">
+                        {getLocalizedText(item.title, lang)}
+                      </h4>
+                      <p className="text-slate-500 font-medium relative z-10 leading-relaxed max-w-3xl">
+                        {getLocalizedText(item.description, lang)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Awards & Certificates Section */}
+      <section id="awards" className="py-24 bg-gradient-to-b from-white via-amber-50/25 to-slate-50 scroll-mt-24 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            {/* Format Notice Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-300 text-amber-900 rounded-full text-xs font-black mb-4 shadow-sm">
+              <Sparkles className="w-4 h-4 text-amber-600" />
+              <span>{t.awards.formatBadge}</span>
+            </div>
+
+            <h2 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4 tracking-tight">
+              {t.awards.title}
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto font-medium text-base sm:text-lg mb-8 leading-relaxed">
+              {t.awards.subtitle}
+            </p>
+
+            {/* Filter Buttons */}
+            <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={() => setAwardLevelFilter('all')}
+                className={`px-5 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+                  awardLevelFilter === 'all'
+                    ? 'bg-amber-600 text-white shadow-lg shadow-amber-200 scale-105'
+                    : 'bg-white text-slate-600 hover:text-amber-700 border border-slate-200 hover:border-amber-300'
+                }`}
+              >
+                {t.awards.tabAll} ({CERTIFICATES.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setAwardLevelFilter('national')}
+                className={`px-5 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 ${
+                  awardLevelFilter === 'national'
+                    ? 'bg-red-600 text-white shadow-lg shadow-red-200 scale-105'
+                    : 'bg-white text-slate-600 hover:text-red-600 border border-slate-200 hover:border-red-300'
+                }`}
+              >
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>{t.awards.tabNational}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAwardLevelFilter('regional')}
+                className={`px-5 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 ${
+                  awardLevelFilter === 'regional'
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-105'
+                    : 'bg-white text-slate-600 hover:text-indigo-600 border border-slate-200 hover:border-indigo-300'
+                }`}
+              >
+                <Medal className="w-3.5 h-3.5 text-indigo-300" />
+                <span>{t.awards.tabRegional}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAwardLevelFilter('provincial')}
+                className={`px-5 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 ${
+                  awardLevelFilter === 'provincial'
+                    ? 'bg-sky-600 text-white shadow-lg shadow-sky-200 scale-105'
+                    : 'bg-white text-slate-600 hover:text-sky-600 border border-slate-200 hover:border-sky-300'
+                }`}
+              >
+                <Award className="w-3.5 h-3.5 text-sky-300" />
+                <span>{t.awards.tabProvincial}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Official Certificates Showcase Banner */}
+          <div className="mb-8 p-5 bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 text-white rounded-3xl border border-blue-500/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0 shadow-inner">
+                <Trophy className="w-6 h-6 text-amber-400" />
+              </div>
+              <div className="text-center sm:text-left">
+                <h4 className="font-black text-sm sm:text-base text-amber-300 tracking-wide">
+                  {lang === 'vi' ? 'Bộ Sưu Tập Bằng Khen & Giấy Khen Thực Tế' : 'Official Merits & Certificates Collection'}
+                </h4>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  {lang === 'vi' 
+                    ? 'Toàn bộ ảnh bằng khen cấp Quốc gia, Khu vực và Tỉnh An Giang được tích hợp trực tiếp, nhấp vào từng bằng khen để phóng to chi tiết.' 
+                    : 'All official diplomas and awards are directly integrated. Click any certificate to inspect full resolution.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <input 
+                type="file" 
+                ref={batchUploadRef} 
+                multiple 
+                accept="image/*" 
+                onChange={handleBatchUpload} 
+                className="hidden" 
+              />
+              <button
+                type="button"
+                onClick={() => batchUploadRef.current?.click()}
+                className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg shadow-blue-500/20 transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+                title={lang === 'vi' ? 'Tùy chọn tải thêm ảnh chụp thực tế từ thiết bị' : 'Optionally upload certificate scans from your device'}
+              >
+                <Upload className="w-4 h-4" />
+                <span>{lang === 'vi' ? 'Tùy chọn nạp thêm ảnh từ máy' : 'Upload scans from device'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Toast Notification */}
+          {batchToast && (
+            <div className="mb-6 p-3 bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 rounded-2xl text-xs font-bold text-center animate-fadeIn">
+              {batchToast}
+            </div>
+          )}
+
+          {/* Certificates Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filteredCertificates.map((cert) => {
+              const isNational = cert.badgeType === 'national';
+              const isRegional = cert.badgeType === 'regional';
+              const isCopied = copiedCertId === cert.id;
+              const certImgSrc = customCertImages[cert.id] || cert.imageUrl;
+
+              return (
+                <div
+                  key={cert.id}
+                  className={`relative p-7 sm:p-8 bg-white rounded-[2.5rem] border-2 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group overflow-hidden ${
+                    isNational
+                      ? 'border-amber-300/90 ring-1 ring-amber-200/60 bg-gradient-to-b from-amber-50/30 to-white'
+                      : isRegional
+                      ? 'border-indigo-200 ring-1 ring-indigo-100 bg-gradient-to-b from-indigo-50/30 to-white'
+                      : 'border-slate-200 hover:border-blue-300 bg-gradient-to-b from-slate-50/40 to-white'
+                  }`}
+                >
+                  {/* Decorative background watermark */}
+                  <Award className="absolute -bottom-6 -right-6 w-36 h-36 text-slate-100 group-hover:text-amber-100/60 transition-colors pointer-events-none" />
+
+                  <div>
+                    {/* Header: Format Badge <Bảng thi>-<Năm>-<Cấp thi> & Level Badge */}
+                    <div className="flex flex-col gap-2.5 mb-5">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        {/* The Key Format Label: <Bảng thi>-<Năm>-<Cấp thi> */}
+                        <div className="flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1.5 rounded-xl shadow-sm">
+                          <FileCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          <code className="text-xs font-mono font-black tracking-wide">
+                            {cert.code}
+                          </code>
+                        </div>
+
+                        {/* Level badge */}
+                        <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
+                          isNational
+                            ? 'bg-red-100 text-red-700 border border-red-200'
+                            : isRegional
+                            ? 'bg-indigo-100 text-indigo-700 border border-indigo-200'
+                            : 'bg-sky-100 text-sky-700 border border-sky-200'
+                        }`}>
+                          {cert.level[lang]}
+                        </span>
+                        {/* Official Certificate Badge */}
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1 shadow-xs">
+                          <Camera className="w-3 h-3 text-emerald-600" />
+                          <span>{lang === 'vi' ? 'Bằng khen thực tế' : 'Real Certificate'}</span>
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-400">
+                        <span className="flex items-center gap-1">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                          <span>{t.awards.division}: {cert.division}</span>
+                        </span>
+                        <span>{t.awards.year}: {cert.year}</span>
+                      </div>
+                    </div>
+
+                    {/* Certificate Real Photo Card Preview */}
+                    <div 
+                      onClick={() => handleOpenCertModal(cert)}
+                      className="relative mb-5 rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-900 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group/img"
+                    >
+                      {/* Image element with onError fallback */}
+                      <img 
+                        src={certImgSrc} 
+                        alt={getLocalizedText(cert.awardTitle, lang)}
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                          const fallback = (e.target as HTMLElement).nextElementSibling;
+                          if (fallback) (fallback as HTMLElement).style.display = 'flex';
+                        }}
+                        className="w-full h-44 object-cover object-center transition-transform duration-300 group-hover/img:scale-105"
+                        loading="lazy"
+                      />
+
+                      {/* Fallback frame if image is loading or unavailable */}
+                      <div 
+                        style={{ display: 'none' }}
+                        className="w-full h-44 bg-gradient-to-br from-amber-50 via-white to-amber-100/60 p-4 flex-col justify-between text-slate-900 border-4 border-double border-amber-600/60 rounded-xl"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="px-2 py-0.5 bg-amber-600 text-white rounded text-[10px] font-black uppercase tracking-wider">
+                            {isNational ? 'BẰNG KHEN' : isRegional ? 'CHỨNG NHẬN' : 'GIẤY KHEN'}
+                          </span>
+                          <span className="text-[10px] font-bold text-slate-500">{cert.year}</span>
+                        </div>
+                        <div className="my-auto text-center px-2">
+                          <p className="text-xs font-black text-amber-950 uppercase line-clamp-2">
+                            {getLocalizedText(cert.awardTitle, lang)}
+                          </p>
+                          <p className="text-[11px] font-bold text-slate-700 mt-1">
+                            TRẦN BẢO KHIÊM
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-between text-[10px] text-slate-600 font-bold border-t border-amber-200/80 pt-1">
+                          <span className="text-amber-800">{cert.division}</span>
+                          <span className="text-blue-600 font-black">{lang === 'vi' ? 'Bấm xem phóng to' : 'Click to inspect'}</span>
+                        </div>
+                      </div>
+
+                      {/* Overlay Bar */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end justify-between p-3 opacity-90 group-hover/img:opacity-100 transition-opacity">
+                        <span className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white flex items-center gap-1 shadow-sm">
+                          <Eye className="w-3 h-3" />
+                          <span>{lang === 'vi' ? 'Xem ảnh bằng khen' : 'View Certificate'}</span>
+                        </span>
+                        {cert.decisionNo ? (
+                          <span className="text-[10px] font-mono text-amber-300 font-bold bg-slate-950/90 px-2 py-0.5 rounded border border-amber-500/40">
+                            {cert.decisionNo}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-bold text-slate-300 bg-slate-900/80 px-2 py-0.5 rounded">
+                            {cert.date || cert.year}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Award Title */}
+                    <h3 className="text-xl font-black text-slate-900 group-hover:text-amber-700 transition-colors leading-snug mb-3">
+                      {getLocalizedText(cert.awardTitle, lang)}
+                    </h3>
+
+                    {/* Issuer */}
+                    <div className="mb-4 p-3 bg-amber-50/70 rounded-xl border border-amber-200/70 text-xs font-bold text-amber-950 flex items-start gap-2">
+                      <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="block text-[10px] text-amber-700 uppercase tracking-wider">{t.awards.issuer}:</span>
+                        <span>{getLocalizedText(cert.issuer, lang)}</span>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    {cert.description && (
+                      <p className="text-slate-600 text-sm font-medium leading-relaxed mb-6">
+                        {getLocalizedText(cert.description, lang)}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Actions Bar */}
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 z-10">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenCertModal(cert)}
+                      className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-xs font-black shadow-md shadow-amber-200/60 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Award className="w-3.5 h-3.5" />
+                      <span>{t.awards.viewCertificate}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCode(cert.code, cert.id)}
+                      className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 cursor-pointer ${
+                        isCopied
+                          ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                          : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'
+                      }`}
+                      title={t.awards.copyCode}
+                    >
+                      {isCopied ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>{t.awards.copied}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-slate-500" />
+                          <span>{t.awards.copyCode}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -461,9 +939,25 @@ const App: React.FC = () => {
       {/* Footer */}
       <footer className="py-16 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl">K</div>
-            <span className="font-black text-xl text-slate-900 tracking-tighter uppercase">TRẦN BẢO KHIÊM</span>
+          <div className="flex flex-col items-center justify-center gap-3 mb-8">
+            <BrandLogo 
+              size="lg" 
+              subtitleText={lang === 'vi' ? 'Trang web & Portfolio chính thức' : 'Official Website & Portfolio'}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            />
+            
+            {/* Button to open Logo & Favicon Kit Modal */}
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => setIsLogoModalOpen(true)}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-xl text-xs font-bold transition-all shadow-2xs hover:shadow-xs cursor-pointer group"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-500 group-hover:rotate-12 transition-transform" />
+                <span>{lang === 'vi' ? 'Xem & Tải Logo / Favicon Web' : 'View & Download Website Logo / Favicon'}</span>
+                <Download className="w-3.5 h-3.5 text-blue-600" />
+              </button>
+            </div>
           </div>
           <div className="flex justify-center gap-8 mb-10 text-slate-400">
             <a 
@@ -496,6 +990,22 @@ const App: React.FC = () => {
         project={selectedProjectDoc}
         isOpen={isDocModalOpen}
         onClose={() => setIsDocModalOpen(false)}
+        lang={lang}
+      />
+
+      {/* Award Certificate Modal */}
+      <AwardModal
+        certificate={selectedCert}
+        isOpen={isCertModalOpen}
+        onClose={() => setIsCertModalOpen(false)}
+        lang={lang}
+        onUpdateCertificateImage={handleUpdateCertImage}
+      />
+
+      {/* Logo & Favicon Kit Modal */}
+      <LogoModal
+        isOpen={isLogoModalOpen}
+        onClose={() => setIsLogoModalOpen(false)}
         lang={lang}
       />
     </div>

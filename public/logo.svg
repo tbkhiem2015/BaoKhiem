@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient for Icon -->
+    <linearGradient id="logoBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="40%" stop-color="#1e3a8a" />
+      <stop offset="80%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Border Gradient -->
+    <linearGradient id="logoBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#fbbf24" />
+    </linearGradient>
+
+    <!-- Stem Gradient -->
+    <linearGradient id="logoStemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+
+    <!-- Gold Accent Gradient -->
+    <linearGradient id="logoGoldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="50%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#fef08a" />
+    </linearGradient>
+
+    <!-- Cyan Gradient -->
+    <linearGradient id="logoCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Text Gradient -->
+    <linearGradient id="logoTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="70%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+  </defs>
+
+  <!-- Left Icon Crest (128x128 inside 160 height, centered at x=16, y=16) -->
+  <g transform="translate(16, 16)">
+    <!-- Squircle Card -->
+    <rect 
+      x="0" 
+      y="0" 
+      width="128" 
+      height="128" 
+      rx="32" 
+      ry="32" 
+      fill="url(#logoBgGrad)" 
+    />
+    <!-- Border -->
+    <rect 
+      x="0" 
+      y="0" 
+      width="128" 
+      height="128" 
+      rx="32" 
+      ry="32" 
+      fill="none" 
+      stroke="url(#logoBorderGrad)" 
+      stroke-width="3.5" 
+      opacity="0.9" 
+    />
+
+    <!-- Code bracket < -->
+    <path 
+      d="M 33 48 L 19 64 L 33 80" 
+      stroke="#38bdf8" 
+      stroke-width="7" 
+      stroke-linecap="round" 
+      stroke-linejoin="round" 
+      fill="none" 
+    />
+
+    <!-- Code bracket > -->
+    <path 
+      d="M 95 48 L 109 64 L 95 80" 
+      stroke="#38bdf8" 
+      stroke-width="7" 
+      stroke-linecap="round" 
+      stroke-linejoin="round" 
+      fill="none" 
+    />
+
+    <!-- Stem of K -->
+    <rect 
+      x="48" 
+      y="36" 
+      width="10" 
+      height="58" 
+      rx="5" 
+      fill="url(#logoStemGrad)" 
+    />
+
+    <!-- Lower Leg of K -->
+    <path 
+      d="M 52 61 L 82 92 C 84 94 87 94 89 93 C 91 91 92 88 90 86 L 63 58 Z" 
+      fill="url(#logoCyanGrad)" 
+    />
+
+    <!-- Upper Arm of K -->
+    <path 
+      d="M 51 65 L 78 39 C 80 37 83 37 85 39 C 87 40 87 43 85 45 L 61 68 Z" 
+      fill="url(#logoGoldGrad)" 
+    />
+
+    <!-- Star at Apex -->
+    <g transform="translate(86, 34)">
+      <path 
+        d="M 0 -10 Q 1.5 -2.5 10 0 Q 1.5 2.5 0 10 Q -1.5 2.5 -10 0 Q -1.5 -2.5 0 -10 Z" 
+        fill="url(#logoGoldGrad)" 
+      />
+      <circle cx="0" cy="0" r="2" fill="#ffffff" />
+    </g>
+  </g>
+
+  <!-- Brand Typography -->
+  <g transform="translate(164, 40)">
+    <!-- Subtitle Tag -->
+    <rect x="0" y="0" width="176" height="22" rx="11" fill="#eff6ff" />
+    <text 
+      x="12" 
+      y="15" 
+      font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+      font-size="10.5" 
+      font-weight="800" 
+      fill="#2563eb" 
+      letter-spacing="1.2"
+    >
+      ★ QUÁN QUÂN QUỐC GIA 2025
+    </text>
+
+    <!-- Main Name Title -->
+    <text 
+      x="0" 
+      y="56" 
+      font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+      font-size="32" 
+      font-weight="900" 
+      fill="url(#logoTextGrad)" 
+      letter-spacing="-0.5"
+    >
+      TRẦN BẢO KHIÊM
+    </text>
+
+    <!-- Role / Tagline -->
+    <text 
+      x="0" 
+      y="84" 
+      font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+      font-size="13" 
+      font-weight="700" 
+      fill="#64748b" 
+      letter-spacing="2"
+    >
+      YOUNG PROGRAMMER &amp; CREATIVE DEVELOPER
+    </text>
+  </g>
+</svg>

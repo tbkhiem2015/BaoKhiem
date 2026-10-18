@@ -14,7 +14,7 @@ export interface Project {
   tags: string[];
   image: string;
   statusBadge?: LocalizedProp;
-  docType?: 'opentwin' | 'greenbin' | 'standard';
+  docType?: 'shineai' | 'hanhtrinhxanh' | 'vuihoctiengviet' | 'opentwin' | 'greenbin' | 'standard';
   docFileLabel?: string;
   link?: string;
 }
@@ -47,4 +47,23 @@ export interface YoutubeChannel {
 export interface SkillItem {
   name: LocalizedProp;
   level: number;
+}
+
+export interface Certificate {
+  id: string;
+  code: string; // Định dạng chuẩn: <Bảng thi>-<Năm>-<Cấp thi> (VD: Bảng D2 - 2026 - Cấp Tỉnh)
+  division: string; // Bảng thi (Bảng A, Bảng D1, Bảng D2)
+  year: string; // Năm (2026, 2025, 2024)
+  level: {
+    vi: string;
+    en: string;
+  }; // Cấp thi (Cấp Quốc gia, Cấp Khu vực, Cấp Tỉnh)
+  awardTitle: LocalizedProp;
+  issuer: LocalizedProp;
+  date?: string;
+  description?: LocalizedProp;
+  badgeType: 'national' | 'regional' | 'provincial' | 'academic' | 'city' | 'school';
+  imageUrl?: string; // Link ảnh bằng khen thực tế do người dùng cung cấp hoặc tải lên
+  decisionNo?: string; // Số Quyết định khen thưởng (ví dụ: 624-QĐ/TWĐTN-CTTN)
+  signer?: LocalizedProp; // Người ký quyết định (Bí thư BCH TW Đoàn, Trưởng BTC, Hiệu trưởng...)
 }

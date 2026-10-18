@@ -11,12 +11,21 @@ import {
   Layers, 
   BookOpen, 
   RefreshCw, 
-  ArrowRight, 
   CheckCircle, 
-  Code, 
-  Boxes 
+  Boxes,
+  Heart,
+  Gamepad2,
+  Brain,
+  Award,
+  Globe
 } from 'lucide-react';
 import { 
+  SHINEAI_METADATA,
+  SHINEAI_SECTIONS,
+  HANHTRINHXANH_METADATA,
+  HANHTRINHXANH_SECTIONS,
+  VUIHOCTIENGVIET_METADATA,
+  VUIHOCTIENGVIET_SECTIONS,
   OPENTWIN_METADATA, 
   OPENTWIN_SECTIONS, 
   GREENBIN_METADATA, 
@@ -41,6 +50,7 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
+      setActiveTab('overview');
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -52,8 +62,37 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
 
   if (!isOpen || !project) return null;
 
-  const isGreenBin = project.docType === 'greenbin';
+  const isShineAI = project.docType === 'shineai';
+  const isHanhTrinhXanh = project.docType === 'hanhtrinhxanh';
+  const isVuiHocTV = project.docType === 'vuihoctiengviet';
   const isOpenTwin = project.docType === 'opentwin';
+  const isGreenBin = project.docType === 'greenbin';
+
+  const getHeaderGradient = () => {
+    if (isShineAI) return 'bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-800';
+    if (isHanhTrinhXanh) return 'bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-700';
+    if (isVuiHocTV) return 'bg-gradient-to-r from-amber-600 via-orange-600 to-rose-700';
+    if (isGreenBin) return 'bg-gradient-to-r from-emerald-600 via-teal-600 to-green-700';
+    return 'bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900';
+  };
+
+  const getDocSubtitle = () => {
+    if (isShineAI) return SHINEAI_METADATA.role;
+    if (isHanhTrinhXanh) return HANHTRINHXANH_METADATA.role;
+    if (isVuiHocTV) return VUIHOCTIENGVIET_METADATA.role;
+    if (isOpenTwin) return OPENTWIN_METADATA.role;
+    if (isGreenBin) return GREENBIN_METADATA.tagline[lang];
+    return '';
+  };
+
+  const getSections = () => {
+    if (isShineAI) return SHINEAI_SECTIONS;
+    if (isHanhTrinhXanh) return HANHTRINHXANH_SECTIONS;
+    if (isVuiHocTV) return VUIHOCTIENGVIET_SECTIONS;
+    if (isOpenTwin) return OPENTWIN_SECTIONS;
+    if (isGreenBin) return GREENBIN_SECTIONS;
+    return [];
+  };
 
   const handleCopyText = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -68,18 +107,35 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className={`p-6 sm:p-8 text-white relative flex-shrink-0 ${
-          isGreenBin 
-            ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-green-700' 
-            : 'bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900'
-        }`}>
+        <div className={`p-6 sm:p-8 text-white relative flex-shrink-0 ${getHeaderGradient()}`}>
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-black rounded-full uppercase tracking-wider">
                   <FileText className="w-3.5 h-3.5" />
-                  {project.docFileLabel || 'Project_Document.md'}
+                  {project.docFileLabel || 'ThuyetMinh_Project.md'}
                 </span>
+
+                {isShineAI && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-300 text-purple-950 text-xs font-black rounded-full uppercase tracking-wider">
+                    <Brain className="w-3.5 h-3.5" />
+                    AI & Special EdTech
+                  </span>
+                )}
+
+                {isHanhTrinhXanh && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-300 text-emerald-950 text-xs font-black rounded-full uppercase tracking-wider">
+                    <Globe className="w-3.5 h-3.5" />
+                    Scratch 3.0 & AI
+                  </span>
+                )}
+
+                {isVuiHocTV && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-300 text-amber-950 text-xs font-black rounded-full uppercase tracking-wider">
+                    <BookOpen className="w-3.5 h-3.5" />
+                    GDPT 2018
+                  </span>
+                )}
 
                 {isOpenTwin && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-400 text-slate-900 text-xs font-black rounded-full uppercase tracking-wider animate-pulse">
@@ -100,8 +156,8 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
                 {typeof project.title === 'string' ? project.title : project.title[lang]}
               </h2>
 
-              <p className="text-white/80 text-sm sm:text-base max-w-2xl font-medium">
-                {isOpenTwin ? OPENTWIN_METADATA.role : GREENBIN_METADATA.tagline[lang]}
+              <p className="text-white/85 text-sm sm:text-base max-w-2xl font-medium leading-snug">
+                {getDocSubtitle()}
               </p>
             </div>
 
@@ -118,36 +174,34 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
           <div className="flex gap-2 mt-6 border-b border-white/20 pb-0 overflow-x-auto">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`px-4 py-2 text-sm font-bold border-b-2 transition-all cursor-pointer ${
+              className={`px-4 py-2 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                 activeTab === 'overview'
                   ? 'border-white text-white'
                   : 'border-transparent text-white/70 hover:text-white'
               }`}
             >
-              {lang === 'vi' ? 'Tổng quan & Kiến trúc' : 'Overview & Architecture'}
+              {lang === 'vi' ? 'Tổng quan & Ý tưởng' : 'Overview & Idea'}
             </button>
             <button
               onClick={() => setActiveTab('details')}
-              className={`px-4 py-2 text-sm font-bold border-b-2 transition-all cursor-pointer ${
+              className={`px-4 py-2 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                 activeTab === 'details'
                   ? 'border-white text-white'
                   : 'border-transparent text-white/70 hover:text-white'
               }`}
             >
-              {isGreenBin 
-                ? (lang === 'vi' ? 'Phần cứng & Cơ cấu' : 'Hardware & Mechanics') 
-                : (lang === 'vi' ? 'Nguyên tắc & Luồng dữ liệu' : 'Principles & Workflow')}
+              {lang === 'vi' ? 'Kiến trúc & Phân hệ' : 'Architecture & Modules'}
             </button>
             <button
               onClick={() => setActiveTab('raw')}
-              className={`px-4 py-2 text-sm font-bold border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-4 py-2 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
                 activeTab === 'raw'
                   ? 'border-white text-white'
                   : 'border-transparent text-white/70 hover:text-white'
               }`}
             >
               <FileText className="w-4 h-4" />
-              {lang === 'vi' ? 'Nội dung tài liệu file' : 'File Documentation'}
+              {lang === 'vi' ? 'Bản thuyết minh đầy đủ' : 'Full Documentation'}
             </button>
           </div>
         </div>
@@ -158,31 +212,141 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
+              {/* SHINEAI OVERVIEW */}
+              {isShineAI && (
+                <>
+                  <div className="p-6 bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 border border-purple-200 rounded-3xl space-y-3">
+                    <span className="text-xs font-black text-purple-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+                      Thông điệp cốt lõi
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+                      "{SHINEAI_METADATA.motto}"
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      ShineAI xây dựng hệ thống AI đa lớp gồm: Phân tích bài làm tức thì, phát hiện xu hướng học tập dài hạn, tự động đề xuất lộ trình tháng và chatbot giao tiếp thích ứng theo từng vai trò (bé, cha mẹ, thầy cô).
+                    </p>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="p-5 bg-purple-50/70 border border-purple-100 rounded-2xl">
+                      <span className="text-xs font-black text-purple-700 uppercase">Đối tượng hỗ trợ</span>
+                      <h4 className="font-extrabold text-slate-900 text-base mt-1">Trẻ ASD & ADHD</h4>
+                      <p className="text-slate-600 text-xs mt-1">Học sinh rối loạn phổ tự kỷ, tăng động giảm chú ý và học sinh tiểu học cần môi trường trực quan.</p>
+                    </div>
+
+                    <div className="p-5 bg-indigo-50/70 border border-indigo-100 rounded-2xl">
+                      <span className="text-xs font-black text-indigo-700 uppercase">Mô hình AI riêng</span>
+                      <h4 className="font-extrabold text-slate-900 text-base mt-1">ShineLM (Fine-tuned Gemma)</h4>
+                      <p className="text-slate-600 text-xs mt-1">Huấn luyện chuyên biệt từ Gemma với 100 mẫu dữ liệu giáo dục và thấu cảm tâm lý trẻ.</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-3">Công nghệ phát triển</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {SHINEAI_METADATA.techStack.map(tech => (
+                        <span key={tech} className="px-3.5 py-1.5 bg-slate-100 text-slate-800 text-xs font-bold rounded-xl">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* HÀNH TRÌNH XANH OVERVIEW */}
+              {isHanhTrinhXanh && (
+                <>
+                  <div className="p-6 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-3xl space-y-3">
+                    <span className="text-xs font-black text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <Globe className="w-4 h-4 text-emerald-600" />
+                      Mục đích & Ý nghĩa nhân văn
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+                      Đồng cảm với nhân viên vệ sinh môi trường & nâng cao ý thức xanh
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      Công việc dọn vệ sinh rác thải luôn nặng nhọc và nguy hiểm. Trò chơi mô phỏng chân thực thử thách quét dọn rác trên đường phố và dưới đáy biển để các bạn học sinh thấu hiểu, trân quý công lao của cô chú lao công và cùng chung tay bảo vệ Trái Đất.
+                    </p>
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="p-5 bg-sky-50 border border-sky-100 rounded-2xl">
+                      <span className="px-2.5 py-0.5 bg-sky-600 text-white text-[10px] font-black rounded uppercase">Cửa 1</span>
+                      <h4 className="font-extrabold text-slate-900 text-base mt-2">Dọn rác trên đường phố</h4>
+                      <p className="text-slate-600 text-xs mt-1">Điều khiển nhân viên vệ sinh dùng chổi, tránh xe cộ để không bị trừ điểm, nâng cấp lên xe gom rác.</p>
+                    </div>
+
+                    <div className="p-5 bg-teal-50 border border-teal-100 rounded-2xl">
+                      <span className="px-2.5 py-0.5 bg-teal-600 text-white text-[10px] font-black rounded uppercase">Cửa 2</span>
+                      <h4 className="font-extrabold text-slate-900 text-base mt-2">Dọn rác dưới đáy biển</h4>
+                      <p className="text-slate-600 text-xs mt-1">Thợ lặn thu gom rác trôi dạt tự do, tránh cá mập hung dữ, hướng tới mốc 100 điểm vinh quang.</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-3">Công cụ AI sáng tạo đã ứng dụng</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {HANHTRINHXANH_METADATA.techStack.map(tech => (
+                        <span key={tech} className="px-3.5 py-1.5 bg-slate-100 text-slate-800 text-xs font-bold rounded-xl">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* VUI HỌC TIẾNG VIỆT OVERVIEW */}
+              {isVuiHocTV && (
+                <>
+                  <div className="p-6 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-3xl space-y-3">
+                    <span className="text-xs font-black text-amber-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <BookOpen className="w-4 h-4 text-amber-600" />
+                      Bộ sách Chân Trời Sáng Tạo (GDPT 2018)
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+                      Học chữ cái, âm vần Tiếng Việt lớp 1 trực quan & hứng thú
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      Phần mềm bám sát 19 bài học chuẩn, kết hợp công nghệ tương tác mô phỏng, luyện gõ phím 10 ngón và các trò chơi thú vị giúp học sinh tự tin tiếp thu tiếng Việt mà không cảm thấy áp lực.
+                    </p>
+                  </div>
+
+                  <div className="grid sm:grid-cols-3 gap-4">
+                    <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                      <div className="text-2xl font-black text-amber-600 mb-1">19</div>
+                      <div className="text-xs font-bold text-slate-600">Bài học âm vần</div>
+                    </div>
+                    <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                      <div className="text-2xl font-black text-rose-600 mb-1">10+</div>
+                      <div className="text-xs font-bold text-slate-600">Dạng bài tập & Game</div>
+                    </div>
+                    <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                      <div className="text-2xl font-black text-blue-600 mb-1">10 Ngón</div>
+                      <div className="text-xs font-bold text-slate-600">Luyện gõ bàn phím</div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* OPENTWIN OVERVIEW */}
               {isOpenTwin && (
                 <>
-                  {/* Status Banner */}
                   <div className="p-5 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-700 flex items-center justify-center font-black">
-                        ⚡
-                      </div>
+                      <div className="w-10 h-10 rounded-xl bg-amber-400/20 text-amber-700 flex items-center justify-center font-black">⚡</div>
                       <div>
                         <h4 className="font-black text-amber-900 text-sm">
                           {lang === 'vi' ? 'Trạng thái dự án: Đang phát triển' : 'Status: In Active Development'}
                         </h4>
-                        <p className="text-amber-700 text-xs">
-                          {lang === 'vi' 
-                            ? 'Phiên bản kiến trúc v5.0 chuẩn bị cho cuộc thi Sáng tạo kỹ thuật' 
-                            : 'Architectural specification v5.0 for tech innovation showcase'}
-                        </p>
+                        <p className="text-amber-700 text-xs">Phiên bản kiến trúc v5.0 chuẩn bị cho cuộc thi Sáng tạo kỹ thuật</p>
                       </div>
                     </div>
-                    <span className="px-3 py-1 bg-amber-200/60 text-amber-900 font-black text-xs rounded-full">
-                      v5.0
-                    </span>
+                    <span className="px-3 py-1 bg-amber-200/60 text-amber-900 font-black text-xs rounded-full">v5.0</span>
                   </div>
 
-                  {/* Core Motto */}
                   <div className="p-6 bg-slate-900 text-white rounded-3xl shadow-md space-y-3">
                     <div className="flex items-center gap-2 text-blue-400 text-xs font-black uppercase tracking-wider">
                       <Sparkles className="w-4 h-4" />
@@ -192,189 +356,45 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
                       "{OPENTWIN_METADATA.coreMotto[lang]}"
                     </p>
                   </div>
-
-                  {/* 4 Core Concepts Matrix */}
-                  <div>
-                    <h3 className="text-lg font-black text-slate-900 mb-4 flex items-center gap-2">
-                      <Layers className="w-5 h-5 text-blue-600" />
-                      {lang === 'vi' ? '4 Khái niệm học tập nền tảng' : '4 Core Learning Concepts'}
-                    </h3>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="p-5 bg-blue-50/60 rounded-2xl border border-blue-100">
-                        <span className="text-xs font-black text-blue-600 uppercase">School Program</span>
-                        <h5 className="font-extrabold text-slate-900 text-base mt-1">Học sinh phải học gì?</h5>
-                        <p className="text-slate-600 text-xs mt-1">Chương trình chuẩn theo trường/lớp (Ví dụ: THCS Lớp 6A1 - Lý Thường Kiệt).</p>
-                      </div>
-                      <div className="p-5 bg-indigo-50/60 rounded-2xl border border-indigo-100">
-                        <span className="text-xs font-black text-indigo-600 uppercase">Personal Program</span>
-                        <h5 className="font-extrabold text-slate-900 text-base mt-1">Lộ trình muốn học?</h5>
-                        <p className="text-slate-600 text-xs mt-1">Lập trình giải thuật, HSG Tin học THCS, IELTS, dự án mở rộng.</p>
-                      </div>
-                      <div className="p-5 bg-amber-50/60 rounded-2xl border border-amber-100">
-                        <span className="text-xs font-black text-amber-700 uppercase">Learning Journal</span>
-                        <h5 className="font-extrabold text-slate-900 text-base mt-1">Thực tế học & hiểu đến đâu?</h5>
-                        <p className="text-slate-600 text-xs mt-1">Nhật ký 30 giây: Môn, bài, mức hiểu (🟢/🟡/🔴), lỗ hổng kiến thức.</p>
-                      </div>
-                      <div className="p-5 bg-emerald-50/60 rounded-2xl border border-emerald-100">
-                        <span className="text-xs font-black text-emerald-700 uppercase">Digital Twin</span>
-                        <h5 className="font-extrabold text-slate-900 text-base mt-1">Đang ở đâu & làm gì tiếp?</h5>
-                        <p className="text-slate-600 text-xs mt-1">Phân tích lỗ hổng (Gap Analysis) & đưa ra hành động cá nhân hóa.</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Tech Stack Pills */}
-                  <div>
-                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-3">
-                      {lang === 'vi' ? 'Công nghệ nền tảng' : 'Technology Stack'}
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {OPENTWIN_METADATA.techStack.map((tech) => (
-                        <span key={tech} className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
                 </>
               )}
 
+              {/* GREENBIN OVERVIEW */}
               {isGreenBin && (
                 <>
-                  {/* GreenBin Overview Banner */}
                   <div className="p-6 bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 rounded-3xl space-y-4">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <span className="text-xs font-black text-emerald-700 uppercase tracking-wider">
-                          Mô hình STEM Môi trường
-                        </span>
-                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">
-                          Robot Phân Loại Rác Tự Động Chi Phí Thấp
-                        </h3>
+                        <span className="text-xs font-black text-emerald-700 uppercase tracking-wider">Mô hình STEM Môi trường</span>
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Robot Phân Loại Rác Tự Động Chi Phí Thấp</h3>
                       </div>
-                      <a
-                        href={GREENBIN_METADATA.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md shadow-emerald-200 transition-all cursor-pointer"
-                      >
+                      <a href={GREENBIN_METADATA.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md shadow-emerald-200 transition-all cursor-pointer">
                         <ExternalLink className="w-4 h-4" />
                         greenbin.ai.studio
                       </a>
                     </div>
                     <p className="text-slate-600 text-sm leading-relaxed">
-                      {lang === 'vi'
-                        ? 'GreenBin AI giải quyết bài toán phân loại rác tại nguồn bằng giải pháp đơn giản, hiệu quả: Sử dụng camera chụp hình ảnh, mô hình Computer Vision nhận diện và Raspberry Pi 4 điều khiển servo lật máng trượt bằng bìa carton thân thiện với môi trường.'
-                        : 'GreenBin AI solves the source waste sorting challenge simply and effectively: Utilizing camera capture, computer vision AI classification, and Raspberry Pi 4 controlling an eco-friendly cardboard flap.'}
+                      Sử dụng camera chụp hình ảnh, AI nhận diện và Raspberry Pi 4 điều khiển servo lật máng trượt bằng bìa carton thân thiện môi trường để phân loại rác Plastic & Other.
                     </p>
-                  </div>
-
-                  {/* 6-Step Pipeline Visual */}
-                  <div>
-                    <h3 className="text-lg font-black text-slate-900 mb-4 flex items-center gap-2">
-                      <RefreshCw className="w-5 h-5 text-emerald-600" />
-                      {lang === 'vi' ? 'Quy trình hoạt động 6 bước' : '6-Step Operational Pipeline'}
-                    </h3>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                      {GREENBIN_METADATA.pipelineSteps.map((step) => (
-                        <div key={step.step} className="p-4 bg-slate-50 border border-slate-100 rounded-2xl flex items-start gap-3">
-                          <span className="w-7 h-7 rounded-lg bg-emerald-600 text-white font-black text-xs flex items-center justify-center shrink-0">
-                            {step.step}
-                          </span>
-                          <div>
-                            <h5 className="font-extrabold text-slate-900 text-sm">
-                              {lang === 'vi' ? step.nameVi : step.nameEn}
-                            </h5>
-                            <p className="text-slate-500 text-xs mt-0.5">
-                              {lang === 'vi' ? step.descVi : step.descEn}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* 2 Bins Classification Guide */}
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="p-5 bg-sky-50 border-2 border-sky-200 rounded-2xl">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="px-3 py-1 bg-sky-600 text-white font-black text-xs rounded-lg uppercase">
-                          Lật Trái → Plastic (Nhựa)
-                        </span>
-                        <span className="text-xs font-bold text-sky-700">Ngăn 1</span>
-                      </div>
-                      <p className="text-slate-700 text-xs font-semibold leading-relaxed">
-                        Chai nhựa, ly/cốc nhựa, bao bì nhựa, vỏ hộp nhựa nhỏ.
-                      </p>
-                    </div>
-
-                    <div className="p-5 bg-emerald-50 border-2 border-emerald-200 rounded-2xl">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="px-3 py-1 bg-emerald-700 text-white font-black text-xs rounded-lg uppercase">
-                          Lật Phải → Other (Còn lại)
-                        </span>
-                        <span className="text-xs font-bold text-emerald-700">Ngăn 2</span>
-                      </div>
-                      <p className="text-slate-700 text-xs font-semibold leading-relaxed">
-                        Giấy, lá cây, vỏ hộp carton, rác sinh hoạt thông thường.
-                      </p>
-                    </div>
                   </div>
                 </>
               )}
             </div>
           )}
 
-          {/* TAB 2: DETAILS & ARCHITECTURE */}
+          {/* TAB 2: DETAILS */}
           {activeTab === 'details' && (
             <div className="space-y-6">
-              {isOpenTwin && (
-                <div className="space-y-6">
-                  {OPENTWIN_SECTIONS.map((sec) => (
-                    <div key={sec.id} className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-                      <h4 className="text-base font-extrabold text-slate-900">
-                        {lang === 'vi' ? sec.titleVi : sec.titleEn}
-                      </h4>
-                      <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed">
-                        {sec.contentVi}
-                      </pre>
-                    </div>
-                  ))}
+              {getSections().map((sec) => (
+                <div key={sec.id} className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                  <h4 className="text-base font-extrabold text-slate-900">
+                    {lang === 'vi' ? sec.titleVi : sec.titleEn}
+                  </h4>
+                  <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed">
+                    {sec.contentVi}
+                  </pre>
                 </div>
-              )}
-
-              {isGreenBin && (
-                <div className="space-y-6">
-                  {/* Hardware List Cards */}
-                  <div>
-                    <h4 className="text-base font-black text-slate-900 mb-4 flex items-center gap-2">
-                      <Cpu className="w-5 h-5 text-emerald-600" />
-                      {lang === 'vi' ? 'Linh kiện phần cứng chính' : 'Main Hardware Components'}
-                    </h4>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      {GREENBIN_METADATA.hardwareComponents.map((item) => (
-                        <div key={item.name} className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-                          <h5 className="font-extrabold text-slate-900 text-sm">{item.name}</h5>
-                          <p className="text-slate-600 text-xs mt-1">
-                            {lang === 'vi' ? item.roleVi : item.roleEn}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {GREENBIN_SECTIONS.map((sec) => (
-                    <div key={sec.id} className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-                      <h4 className="text-base font-extrabold text-slate-900">
-                        {lang === 'vi' ? sec.titleVi : sec.titleEn}
-                      </h4>
-                      <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed">
-                        {sec.contentVi}
-                      </pre>
-                    </div>
-                  ))}
-                </div>
-              )}
+              ))}
             </div>
           )}
 
@@ -382,49 +402,30 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
           {activeTab === 'raw' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-500">
-                  {project.docFileLabel || 'DOCUMENT_FILE'}
+                <span className="text-xs font-mono text-slate-500 font-bold">
+                  {project.docFileLabel || 'ThuyetMinh.md'}
                 </span>
                 <button
                   onClick={() => {
-                    const text = isOpenTwin 
-                      ? OPENTWIN_SECTIONS.map(s => `## ${s.titleVi}\n\n${s.contentVi}`).join('\n\n---\n\n')
-                      : GREENBIN_SECTIONS.map(s => `## ${s.titleVi}\n\n${s.contentVi}`).join('\n\n---\n\n');
+                    const text = getSections().map(s => `## ${s.titleVi}\n\n${s.contentVi}`).join('\n\n---\n\n');
                     handleCopyText(text);
                   }}
                   className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer"
                 >
                   {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
-                  {copied ? (lang === 'vi' ? 'Đã sao chép!' : 'Copied!') : (lang === 'vi' ? 'Sao chép tài liệu' : 'Copy Document')}
+                  {copied ? (lang === 'vi' ? 'Đã sao chép!' : 'Copied!') : (lang === 'vi' ? 'Sao chép văn bản' : 'Copy Text')}
                 </button>
               </div>
 
               <div className="p-5 bg-slate-900 text-slate-100 rounded-2xl font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto max-h-[500px]">
-                {isOpenTwin && (
-                  <div>
-                    <p className="text-blue-400 font-bold mb-4"># OpenTwin --- Student Digital Twin AI (v5.0)</p>
-                    <p className="text-slate-400 mb-4">{`// Source of Truth cho kiến trúc sản phẩm & mô hình học tập cá nhân hóa`}</p>
-                    {OPENTWIN_SECTIONS.map((s, idx) => (
-                      <div key={idx} className="mb-6">
-                        <p className="text-amber-400 font-bold mb-2">## {s.titleVi}</p>
-                        <p className="whitespace-pre-wrap text-slate-300">{s.contentVi}</p>
-                      </div>
-                    ))}
+                <p className="text-blue-400 font-bold mb-4"># BẢN THUYẾT MINH PHẦN MỀM SÁNG TẠO: {project.docFileLabel?.split('.')[0]}</p>
+                <p className="text-slate-400 mb-4">{`// Tác giả: Trần Bảo Khiêm - Trường PT Thực hành Sư phạm ĐH An Giang`}</p>
+                {getSections().map((s, idx) => (
+                  <div key={idx} className="mb-6">
+                    <p className="text-amber-400 font-bold mb-2">## {s.titleVi}</p>
+                    <p className="whitespace-pre-wrap text-slate-300">{s.contentVi}</p>
                   </div>
-                )}
-
-                {isGreenBin && (
-                  <div>
-                    <p className="text-emerald-400 font-bold mb-4"># GreenBin AI --- AI Smart Waste Sorting Robot</p>
-                    <p className="text-slate-400 mb-4">{`// Brochure & Technical Specification Document`}</p>
-                    {GREENBIN_SECTIONS.map((s, idx) => (
-                      <div key={idx} className="mb-6">
-                        <p className="text-teal-400 font-bold mb-2">## {s.titleVi}</p>
-                        <p className="whitespace-pre-wrap text-slate-300">{s.contentVi}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                ))}
               </div>
             </div>
           )}
@@ -433,9 +434,7 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
         {/* Modal Footer */}
         <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 flex-shrink-0">
           <div className="text-xs text-slate-500 font-medium">
-            {isOpenTwin 
-              ? (lang === 'vi' ? 'Dự án nghiên cứu & phát triển bởi Trần Bảo Khiêm' : 'R&D Project by Tran Bao Khiem')
-              : (lang === 'vi' ? 'Dự án STEM Robotics & Môi trường' : 'STEM Robotics & Environment Project')}
+            Tác giả: Trần Bảo Khiêm &bull; Portfolio Chính Thức
           </div>
           <div className="flex gap-3">
             {isGreenBin && (
@@ -446,7 +445,7 @@ const ProjectDocModal: React.FC<ProjectDocModalProps> = ({ project, isOpen, onCl
                 className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-sm"
               >
                 <ExternalLink className="w-4 h-4" />
-                {lang === 'vi' ? 'Xem Website GreenBin' : 'Visit Website'}
+                Website GreenBin
               </a>
             )}
             <button

@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="sqBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="35%" stop-color="#1e3a8a" />
+      <stop offset="70%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Outer Border Glow -->
+    <linearGradient id="sqBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#fbbf24" />
+    </linearGradient>
+
+    <!-- Stem Gradient -->
+    <linearGradient id="sqStemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+
+    <!-- Gold Champion Gradient -->
+    <linearGradient id="sqGoldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="50%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#fef08a" />
+    </linearGradient>
+
+    <!-- Cyber Cyan Gradient -->
+    <linearGradient id="sqCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filters -->
+    <filter id="sqGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="sqStarGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Squircle Card -->
+  <rect 
+    x="24" 
+    y="24" 
+    width="464" 
+    height="464" 
+    rx="116" 
+    ry="116" 
+    fill="url(#sqBgGrad)" 
+  />
+
+  <!-- High-Tech Inner Glow Border -->
+  <rect 
+    x="24" 
+    y="24" 
+    width="464" 
+    height="464" 
+    rx="116" 
+    ry="116" 
+    fill="none" 
+    stroke="url(#sqBorderGrad)" 
+    stroke-width="12" 
+    opacity="0.85" 
+  />
+
+  <!-- Left Code Bracket < -->
+  <path 
+    d="M 125 180 L 68 256 L 125 332" 
+    stroke="#38bdf8" 
+    stroke-width="26" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+    fill="none" 
+    filter="url(#sqGlow)"
+  />
+
+  <!-- Right Code Bracket > -->
+  <path 
+    d="M 387 180 L 444 256 L 387 332" 
+    stroke="#38bdf8" 
+    stroke-width="26" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+    fill="none" 
+    filter="url(#sqGlow)"
+  />
+
+  <!-- Central Monogram "K" (Khiêm) -->
+  <!-- 1. K Vertical Stem -->
+  <rect 
+    x="184" 
+    y="140" 
+    width="38" 
+    height="232" 
+    rx="19" 
+    fill="url(#sqStemGrad)" 
+    filter="url(#sqGlow)" 
+  />
+
+  <!-- 2. K Lower Diagonal Leg -->
+  <path 
+    d="M 205 244 L 312 364 C 318 371 328 373 336 368 C 344 362 346 351 340 343 L 244 235 Z" 
+    fill="url(#sqCyanGrad)" 
+  />
+
+  <!-- 3. K Upper Diagonal Arm -->
+  <path 
+    d="M 203 260 L 298 155 C 304 148 315 147 322 153 C 330 159 331 170 324 178 L 240 272 Z" 
+    fill="url(#sqGoldGrad)" 
+  />
+
+  <!-- Champion Star / Spark at Apex -->
+  <g transform="translate(325, 135)" filter="url(#sqStarGlow)">
+    <path 
+      d="M 0 -38 Q 4 -8 38 0 Q 4 8 0 38 Q -4 8 -38 0 Q -4 -8 0 -38 Z" 
+      fill="url(#sqGoldGrad)" 
+    />
+    <circle cx="0" cy="0" r="7" fill="#ffffff" />
+  </g>
+
+  <!-- Joint Accent -->
+  <circle cx="218" cy="256" r="8" fill="#38bdf8" />
+
+  <!-- Bottom Brand Text Inside Badge -->
+  <text 
+    x="256" 
+    y="442" 
+    text-anchor="middle" 
+    font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+    font-size="20" 
+    font-weight="900" 
+    fill="#93c5fd" 
+    letter-spacing="5"
+  >
+    BAOKHIEM.DEV
+  </text>
+</svg>
