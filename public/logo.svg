@@ -1,165 +1,128 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient for Icon -->
-    <linearGradient id="logoBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="40%" stop-color="#1e3a8a" />
-      <stop offset="80%" stop-color="#2563eb" />
-      <stop offset="100%" stop-color="#0284c7" />
-    </linearGradient>
+    <radialGradient id="hzSpaceGlow" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="40%" stop-color="#0f172a" />
+      <stop offset="85%" stop-color="#050814" />
+      <stop offset="100%" stop-color="#02040a" />
+    </radialGradient>
 
-    <!-- Border Gradient -->
-    <linearGradient id="logoBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="hzCyberRim" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="50%" stop-color="#818cf8" />
-      <stop offset="100%" stop-color="#fbbf24" />
+      <stop offset="25%" stop-color="#818cf8" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="75%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#00f5ff" />
     </linearGradient>
 
-    <!-- Stem Gradient -->
-    <linearGradient id="logoStemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="hzPillarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="100%" stop-color="#e0f2fe" />
-    </linearGradient>
-
-    <!-- Gold Accent Gradient -->
-    <linearGradient id="logoGoldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f59e0b" />
-      <stop offset="50%" stop-color="#fbbf24" />
-      <stop offset="100%" stop-color="#fef08a" />
-    </linearGradient>
-
-    <!-- Cyan Gradient -->
-    <linearGradient id="logoCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="30%" stop-color="#e0f2fe" />
+      <stop offset="70%" stop-color="#38bdf8" />
       <stop offset="100%" stop-color="#0284c7" />
     </linearGradient>
 
-    <!-- Text Gradient -->
-    <linearGradient id="logoTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="70%" stop-color="#1e3a8a" />
-      <stop offset="100%" stop-color="#2563eb" />
+    <linearGradient id="hzChampionGold" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="30%" stop-color="#f59e0b" />
+      <stop offset="60%" stop-color="#fbbf24" />
+      <stop offset="85%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#ffffff" />
     </linearGradient>
+
+    <linearGradient id="hzCyberNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff" />
+      <stop offset="45%" stop-color="#0ea5e9" />
+      <stop offset="85%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+
+    <filter id="hzNeonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="hzStarGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
   </defs>
 
-  <!-- Left Icon Crest (128x128 inside 160 height, centered at x=16, y=16) -->
+  <!-- Left Icon Emblem (128x128 scale from 512, placed at x=16, y=16) -->
   <g transform="translate(16, 16)">
-    <!-- Squircle Card -->
-    <rect 
-      x="0" 
-      y="0" 
-      width="128" 
-      height="128" 
-      rx="32" 
-      ry="32" 
-      fill="url(#logoBgGrad)" 
-    />
-    <!-- Border -->
-    <rect 
-      x="0" 
-      y="0" 
-      width="128" 
-      height="128" 
-      rx="32" 
-      ry="32" 
-      fill="none" 
-      stroke="url(#logoBorderGrad)" 
-      stroke-width="3.5" 
-      opacity="0.9" 
-    />
+    <!-- Base -->
+    <rect x="0" y="0" width="128" height="128" rx="32" fill="url(#hzSpaceGlow)" />
+    <rect x="0" y="0" width="128" height="128" rx="32" fill="none" stroke="url(#hzCyberRim)" stroke-width="3" opacity="0.9" />
 
-    <!-- Code bracket < -->
-    <path 
-      d="M 33 48 L 19 64 L 33 80" 
-      stroke="#38bdf8" 
-      stroke-width="7" 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-      fill="none" 
-    />
+    <!-- 0.25x scale of 512 internal contents -->
+    <g transform="scale(0.25)">
+      <!-- Brackets -->
+      <path d="M 124 184 L 66 256 L 124 328" fill="none" stroke="#00f5ff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" filter="url(#hzNeonGlow)" />
+      <path d="M 124 184 L 66 256 L 124 328" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M 388 184 L 446 256 L 388 328" fill="none" stroke="#fbbf24" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" filter="url(#hzNeonGlow)" />
+      <path d="M 388 184 L 446 256 L 388 328" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 
-    <!-- Code bracket > -->
-    <path 
-      d="M 95 48 L 109 64 L 95 80" 
-      stroke="#38bdf8" 
-      stroke-width="7" 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-      fill="none" 
-    />
+      <!-- Stem -->
+      <g filter="url(#hzNeonGlow)">
+        <rect x="172" y="118" width="46" height="272" rx="23" fill="url(#hzPillarGrad)" />
+        <rect x="187" y="132" width="16" height="244" rx="8" fill="#ffffff" opacity="0.8" />
+      </g>
 
-    <!-- Stem of K -->
-    <rect 
-      x="48" 
-      y="36" 
-      width="10" 
-      height="58" 
-      rx="5" 
-      fill="url(#logoStemGrad)" 
-    />
+      <!-- Lower Arm -->
+      <g filter="url(#hzNeonGlow)">
+        <path d="M 200 248 L 316 376 C 324 385 338 387 348 379 C 358 371 360 357 351 347 L 246 230 Z" fill="url(#hzCyberNeon)" />
+        <path d="M 218 248 L 328 368" stroke="#00f5ff" stroke-width="8" stroke-linecap="round" />
+      </g>
 
-    <!-- Lower Leg of K -->
-    <path 
-      d="M 52 61 L 82 92 C 84 94 87 94 89 93 C 91 91 92 88 90 86 L 63 58 Z" 
-      fill="url(#logoCyanGrad)" 
-    />
+      <!-- Upper Arm -->
+      <g filter="url(#hzNeonGlow)">
+        <path d="M 198 266 L 306 142 C 314 133 328 131 338 139 C 347 147 348 161 340 170 L 246 280 Z" fill="url(#hzChampionGold)" />
+        <path d="M 212 258 L 322 148" stroke="#fef08a" stroke-width="8" stroke-linecap="round" />
+      </g>
 
-    <!-- Upper Arm of K -->
-    <path 
-      d="M 51 65 L 78 39 C 80 37 83 37 85 39 C 87 40 87 43 85 45 L 61 68 Z" 
-      fill="url(#logoGoldGrad)" 
-    />
+      <!-- Center Node -->
+      <circle cx="216" cy="256" r="14" fill="#00f5ff" filter="url(#hzNeonGlow)" />
+      <circle cx="216" cy="256" r="7" fill="#ffffff" />
 
-    <!-- Star at Apex -->
-    <g transform="translate(86, 34)">
-      <path 
-        d="M 0 -10 Q 1.5 -2.5 10 0 Q 1.5 2.5 0 10 Q -1.5 2.5 -10 0 Q -1.5 -2.5 0 -10 Z" 
-        fill="url(#logoGoldGrad)" 
-      />
-      <circle cx="0" cy="0" r="2" fill="#ffffff" />
+      <!-- Star -->
+      <g transform="translate(348, 128)" filter="url(#hzStarGlow)">
+        <circle cx="0" cy="0" r="28" fill="#f59e0b" opacity="0.4" />
+        <path d="M 0 -44 Q 5 -9 44 0 Q 5 9 0 44 Q -5 9 -44 0 Q -5 -9 0 -44 Z" fill="url(#hzChampionGold)" />
+        <circle cx="0" cy="0" r="10" fill="#ffffff" />
+      </g>
     </g>
   </g>
 
-  <!-- Brand Typography -->
-  <g transform="translate(164, 40)">
-    <!-- Subtitle Tag -->
-    <rect x="0" y="0" width="176" height="22" rx="11" fill="#eff6ff" />
-    <text 
-      x="12" 
-      y="15" 
-      font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
-      font-size="10.5" 
-      font-weight="800" 
-      fill="#2563eb" 
-      letter-spacing="1.2"
-    >
-      ★ QUÁN QUÂN QUỐC GIA 2025
-    </text>
-
-    <!-- Main Name Title -->
-    <text 
-      x="0" 
-      y="56" 
-      font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
-      font-size="32" 
-      font-weight="900" 
-      fill="url(#logoTextGrad)" 
-      letter-spacing="-0.5"
-    >
+  <!-- Brand Typography Lockup (Right Side) -->
+  <g transform="translate(164, 0)">
+    <!-- Primary Name -->
+    <text x="0" y="64" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="900" letter-spacing="-0.5" fill="#0f172a">
       TRẦN BẢO KHIÊM
     </text>
 
-    <!-- Role / Tagline -->
-    <text 
-      x="0" 
-      y="84" 
-      font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
-      font-size="13" 
-      font-weight="700" 
-      fill="#64748b" 
-      letter-spacing="2"
-    >
-      YOUNG PROGRAMMER &amp; CREATIVE DEVELOPER
+    <!-- Subtitle with Champion Pill -->
+    <g transform="translate(0, 84)">
+      <!-- Gold Badge -->
+      <rect x="0" y="0" width="195" height="26" rx="13" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" />
+      <text x="12" y="17" font-family="'Inter', system-ui, sans-serif" font-size="11.5" font-weight="800" fill="#b45309" letter-spacing="0.5">
+        ★ QUÁN QUÂN QUỐC GIA 2025
+      </text>
+
+      <!-- Tag text -->
+      <text x="210" y="17" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="700" fill="#2563eb" letter-spacing="0.5">
+        LẬP TRÌNH VIÊN NHÍ
+      </text>
+    </g>
+
+    <!-- Domain & Credentials line -->
+    <text x="0" y="138" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="bold" fill="#64748b" letter-spacing="1">
+      baokhiem.dev • Bảng D1 &amp; D2 • Tin học trẻ Việt Nam
     </text>
   </g>
 </svg>

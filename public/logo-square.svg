@@ -1,145 +1,128 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="sqBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="35%" stop-color="#1e3a8a" />
-      <stop offset="70%" stop-color="#2563eb" />
-      <stop offset="100%" stop-color="#0284c7" />
-    </linearGradient>
+    <radialGradient id="sqSpaceGlow" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="40%" stop-color="#0f172a" />
+      <stop offset="85%" stop-color="#050814" />
+      <stop offset="100%" stop-color="#02040a" />
+    </radialGradient>
 
-    <!-- Outer Border Glow -->
-    <linearGradient id="sqBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="sqCyberRim" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="50%" stop-color="#818cf8" />
-      <stop offset="100%" stop-color="#fbbf24" />
+      <stop offset="25%" stop-color="#818cf8" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="75%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#00f5ff" />
     </linearGradient>
 
-    <!-- Stem Gradient -->
-    <linearGradient id="sqStemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="sqPillarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="100%" stop-color="#e0f2fe" />
-    </linearGradient>
-
-    <!-- Gold Champion Gradient -->
-    <linearGradient id="sqGoldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f59e0b" />
-      <stop offset="50%" stop-color="#fbbf24" />
-      <stop offset="100%" stop-color="#fef08a" />
-    </linearGradient>
-
-    <!-- Cyber Cyan Gradient -->
-    <linearGradient id="sqCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="30%" stop-color="#e0f2fe" />
+      <stop offset="70%" stop-color="#38bdf8" />
       <stop offset="100%" stop-color="#0284c7" />
     </linearGradient>
 
-    <!-- Drop Shadow Filters -->
-    <filter id="sqGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="10" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    <linearGradient id="sqChampionGold" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="30%" stop-color="#f59e0b" />
+      <stop offset="60%" stop-color="#fbbf24" />
+      <stop offset="85%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <linearGradient id="sqCyberNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff" />
+      <stop offset="45%" stop-color="#0ea5e9" />
+      <stop offset="85%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+
+    <linearGradient id="sqBracketLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <linearGradient id="sqBracketRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+
+    <filter id="sqNeonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur1" />
+      <feGaussianBlur stdDeviation="5" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
     </filter>
 
-    <filter id="sqStarGlow" x="-30%" y="-30%" width="160%" height="160%">
+    <filter id="sqStarGlow" x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur stdDeviation="8" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
     </filter>
   </defs>
 
-  <!-- Background Squircle Card -->
-  <rect 
-    x="24" 
-    y="24" 
-    width="464" 
-    height="464" 
-    rx="116" 
-    ry="116" 
-    fill="url(#sqBgGrad)" 
-  />
+  <!-- Background Base -->
+  <rect x="20" y="20" width="472" height="472" rx="100" fill="url(#sqSpaceGlow)" />
+  <rect x="20" y="20" width="472" height="472" rx="100" fill="none" stroke="url(#sqCyberRim)" stroke-width="6" opacity="0.9" />
+  <rect x="32" y="32" width="448" height="448" rx="88" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="10 8" opacity="0.3" />
 
-  <!-- High-Tech Inner Glow Border -->
-  <rect 
-    x="24" 
-    y="24" 
-    width="464" 
-    height="464" 
-    rx="116" 
-    ry="116" 
-    fill="none" 
-    stroke="url(#sqBorderGrad)" 
-    stroke-width="12" 
-    opacity="0.85" 
-  />
+  <!-- Emblem Icon Scaled at Top Center (0.8x scaled) -->
+  <g transform="translate(52, 28) scale(0.8)">
+    <!-- Brackets -->
+    <path d="M 124 184 L 66 256 L 124 328" fill="none" stroke="url(#sqBracketLeft)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" filter="url(#sqNeonGlow)" />
+    <path d="M 124 184 L 66 256 L 124 328" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 388 184 L 446 256 L 388 328" fill="none" stroke="url(#sqBracketRight)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" filter="url(#sqNeonGlow)" />
+    <path d="M 388 184 L 446 256 L 388 328" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 
-  <!-- Left Code Bracket < -->
-  <path 
-    d="M 125 180 L 68 256 L 125 332" 
-    stroke="#38bdf8" 
-    stroke-width="26" 
-    stroke-linecap="round" 
-    stroke-linejoin="round" 
-    fill="none" 
-    filter="url(#sqGlow)"
-  />
+    <!-- Stem of K -->
+    <g filter="url(#sqNeonGlow)">
+      <rect x="172" y="118" width="46" height="272" rx="23" fill="url(#sqPillarGrad)" />
+      <rect x="187" y="132" width="16" height="244" rx="8" fill="#ffffff" opacity="0.8" />
+    </g>
 
-  <!-- Right Code Bracket > -->
-  <path 
-    d="M 387 180 L 444 256 L 387 332" 
-    stroke="#38bdf8" 
-    stroke-width="26" 
-    stroke-linecap="round" 
-    stroke-linejoin="round" 
-    fill="none" 
-    filter="url(#sqGlow)"
-  />
+    <!-- Lower Arm -->
+    <g filter="url(#sqNeonGlow)">
+      <path d="M 200 248 L 316 376 C 324 385 338 387 348 379 C 358 371 360 357 351 347 L 246 230 Z" fill="url(#sqCyberNeon)" />
+      <path d="M 218 248 L 328 368" stroke="#00f5ff" stroke-width="8" stroke-linecap="round" />
+      <path d="M 226 252 L 322 358" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.9" />
+    </g>
 
-  <!-- Central Monogram "K" (Khiêm) -->
-  <!-- 1. K Vertical Stem -->
-  <rect 
-    x="184" 
-    y="140" 
-    width="38" 
-    height="232" 
-    rx="19" 
-    fill="url(#sqStemGrad)" 
-    filter="url(#sqGlow)" 
-  />
+    <!-- Upper Arm -->
+    <g filter="url(#sqNeonGlow)">
+      <path d="M 198 266 L 306 142 C 314 133 328 131 338 139 C 347 147 348 161 340 170 L 246 280 Z" fill="url(#sqChampionGold)" />
+      <path d="M 212 258 L 322 148" stroke="#fef08a" stroke-width="8" stroke-linecap="round" />
+      <path d="M 218 254 L 316 154" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+    </g>
 
-  <!-- 2. K Lower Diagonal Leg -->
-  <path 
-    d="M 205 244 L 312 364 C 318 371 328 373 336 368 C 344 362 346 351 340 343 L 244 235 Z" 
-    fill="url(#sqCyanGrad)" 
-  />
+    <!-- Center Node -->
+    <circle cx="216" cy="256" r="14" fill="#00f5ff" filter="url(#sqNeonGlow)" />
+    <circle cx="216" cy="256" r="7" fill="#ffffff" />
 
-  <!-- 3. K Upper Diagonal Arm -->
-  <path 
-    d="M 203 260 L 298 155 C 304 148 315 147 322 153 C 330 159 331 170 324 178 L 240 272 Z" 
-    fill="url(#sqGoldGrad)" 
-  />
-
-  <!-- Champion Star / Spark at Apex -->
-  <g transform="translate(325, 135)" filter="url(#sqStarGlow)">
-    <path 
-      d="M 0 -38 Q 4 -8 38 0 Q 4 8 0 38 Q -4 8 -38 0 Q -4 -8 0 -38 Z" 
-      fill="url(#sqGoldGrad)" 
-    />
-    <circle cx="0" cy="0" r="7" fill="#ffffff" />
+    <!-- Apex Champion Star -->
+    <g transform="translate(348, 128)" filter="url(#sqStarGlow)">
+      <circle cx="0" cy="0" r="28" fill="#f59e0b" opacity="0.3" />
+      <path d="M 0 -44 Q 5 -9 44 0 Q 5 9 0 44 Q -5 9 -44 0 Q -5 -9 0 -44 Z" fill="url(#sqChampionGold)" />
+      <path d="M 0 -22 Q 3 -4 22 0 Q 3 4 0 22 Q -3 4 -22 0 Q -3 -4 0 -22 Z" fill="#ffffff" transform="rotate(45)" opacity="0.7" />
+      <circle cx="0" cy="0" r="10" fill="#ffffff" />
+    </g>
   </g>
 
-  <!-- Joint Accent -->
-  <circle cx="218" cy="256" r="8" fill="#38bdf8" />
+  <!-- Typography Lockup (Bottom Half) -->
+  <text x="256" y="405" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="28" font-weight="900" letter-spacing="3" fill="#ffffff">
+    TRẦN BẢO KHIÊM
+  </text>
+  
+  <rect x="146" y="424" width="220" height="24" rx="12" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+  <text x="256" y="440" text-anchor="middle" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="800" letter-spacing="1.5" fill="#facc15">
+    ★ QUÁN QUÂN QUỐC GIA 2025 ★
+  </text>
 
-  <!-- Bottom Brand Text Inside Badge -->
-  <text 
-    x="256" 
-    y="442" 
-    text-anchor="middle" 
-    font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
-    font-size="20" 
-    font-weight="900" 
-    fill="#93c5fd" 
-    letter-spacing="5"
-  >
+  <text x="256" y="472" text-anchor="middle" font-family="'Courier New', Courier, monospace" font-size="12" font-weight="bold" letter-spacing="2" fill="#38bdf8">
     BAOKHIEM.DEV
   </text>
 </svg>

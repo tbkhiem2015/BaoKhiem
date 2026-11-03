@@ -1,142 +1,248 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="35%" stop-color="#1e3a8a" />
-      <stop offset="70%" stop-color="#2563eb" />
-      <stop offset="100%" stop-color="#0284c7" />
-    </linearGradient>
+    <!-- Deep Cosmic Obsidian Background -->
+    <radialGradient id="spaceGlow" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="40%" stop-color="#0f172a" />
+      <stop offset="85%" stop-color="#050814" />
+      <stop offset="100%" stop-color="#02040a" />
+    </radialGradient>
 
-    <!-- Outer Border Glow -->
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Metallic Rim Multi-stop Gradient -->
+    <linearGradient id="cyberRim" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="50%" stop-color="#818cf8" />
-      <stop offset="100%" stop-color="#fbbf24" />
+      <stop offset="25%" stop-color="#818cf8" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="75%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#00f5ff" />
     </linearGradient>
 
-    <!-- K Stem Gradient -->
-    <linearGradient id="stemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <!-- Glass Specular Highlight -->
+    <linearGradient id="glassShine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Monogram K - Core Pillar Gradient -->
+    <linearGradient id="pillarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="100%" stop-color="#e0f2fe" />
-    </linearGradient>
-
-    <!-- K Top Arm (Gold Champion Gradient) -->
-    <linearGradient id="goldGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f59e0b" />
-      <stop offset="50%" stop-color="#fbbf24" />
-      <stop offset="100%" stop-color="#fef08a" />
-    </linearGradient>
-
-    <!-- K Bottom Arm (Cyber Cyan Gradient) -->
-    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="30%" stop-color="#e0f2fe" />
+      <stop offset="70%" stop-color="#38bdf8" />
       <stop offset="100%" stop-color="#0284c7" />
     </linearGradient>
 
-    <!-- Drop Shadow Filters -->
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="12" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    <!-- Champion Golden Ascending Arm -->
+    <linearGradient id="championGold" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="30%" stop-color="#f59e0b" />
+      <stop offset="60%" stop-color="#fbbf24" />
+      <stop offset="85%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <!-- Cyber Neon Blue Descending Arm -->
+    <linearGradient id="cyberNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff" />
+      <stop offset="45%" stop-color="#0ea5e9" />
+      <stop offset="85%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+
+    <!-- Code Bracket Cyan Gradient -->
+    <linearGradient id="bracketLeftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <!-- Code Bracket Gold Gradient -->
+    <linearGradient id="bracketRightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+
+    <!-- Glow & Shadow Filters -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="blur1" />
+      <feGaussianBlur stdDeviation="6" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
     </filter>
 
-    <filter id="starGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="8" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    <filter id="starFlare" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
     </filter>
   </defs>
 
-  <!-- Background Squircle Card -->
-  <rect 
-    x="24" 
-    y="24" 
-    width="464" 
-    height="464" 
-    rx="116" 
-    ry="116" 
-    fill="url(#bgGrad)" 
-  />
+  <!-- Outer Drop Shadow -->
+  <rect x="28" y="28" width="456" height="456" rx="112" fill="#000000" opacity="0.6" />
 
-  <!-- High-Tech Inner Glow Border -->
-  <rect 
-    x="24" 
-    y="24" 
-    width="464" 
-    height="464" 
-    rx="116" 
-    ry="116" 
+  <!-- Main Squircle Badge Base -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#spaceGlow)" />
+
+  <!-- High-Tech Neon Border Ring -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="none" stroke="url(#cyberRim)" stroke-width="8" opacity="0.9" />
+
+  <!-- Inner Concentric Circuit Line -->
+  <rect x="36" y="36" width="440" height="440" rx="100" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="12 8" opacity="0.3" />
+
+  <!-- Glass Specular Reflection on Upper Half -->
+  <path d="M 28 136 C 28 76, 76 28, 136 28 L 376 28 C 436 28, 484 76, 484 136 L 484 210 Q 256 270 28 210 Z" fill="url(#glassShine)" />
+
+  <!-- Cybernetic Grid Dot Matrix (Background Accent) -->
+  <g fill="#38bdf8" opacity="0.18">
+    <circle cx="80" cy="80" r="3" />
+    <circle cx="120" cy="80" r="2.5" />
+    <circle cx="80" cy="120" r="2.5" />
+    <circle cx="432" cy="80" r="3" />
+    <circle cx="392" cy="80" r="2.5" />
+    <circle cx="432" cy="120" r="2.5" />
+    <circle cx="80" cy="432" r="3" />
+    <circle cx="120" cy="432" r="2.5" />
+    <circle cx="80" cy="392" r="2.5" />
+    <circle cx="432" cy="432" r="3" />
+    <circle cx="392" cy="432" r="2.5" />
+    <circle cx="432" cy="392" r="2.5" />
+  </g>
+
+  <!-- Left Code Bracket < (Polished 3D Neon Chevron) -->
+  <path 
+    d="M 124 184 L 66 256 L 124 328" 
     fill="none" 
-    stroke="url(#borderGrad)" 
-    stroke-width="12" 
-    opacity="0.85" 
-  />
-
-  <!-- Subtle Inner Circuit Grid Lines -->
-  <path 
-    d="M 120 48 L 120 100 L 80 140 M 392 48 L 392 100 L 432 140 M 120 464 L 120 412 L 80 372 M 392 464 L 392 412 L 432 372" 
-    stroke="#38bdf8" 
-    stroke-width="3" 
-    stroke-linecap="round" 
-    opacity="0.25" 
-  />
-
-  <!-- Left Code Bracket < -->
-  <path 
-    d="M 125 180 L 68 256 L 125 332" 
-    stroke="#38bdf8" 
+    stroke="url(#bracketLeftGrad)" 
     stroke-width="26" 
     stroke-linecap="round" 
-    stroke-linejoin="round" 
+    stroke-linejoin="round"
+    filter="url(#neonGlow)"
+  />
+  <path 
+    d="M 124 184 L 66 256 L 124 328" 
     fill="none" 
-    filter="url(#softGlow)"
+    stroke="#ffffff" 
+    stroke-width="8" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    opacity="0.9"
   />
 
-  <!-- Right Code Bracket > -->
+  <!-- Right Code Bracket > (Polished 3D Gold Chevron) -->
   <path 
-    d="M 387 180 L 444 256 L 387 332" 
-    stroke="#38bdf8" 
+    d="M 388 184 L 446 256 L 388 328" 
+    fill="none" 
+    stroke="url(#bracketRightGrad)" 
     stroke-width="26" 
     stroke-linecap="round" 
-    stroke-linejoin="round" 
+    stroke-linejoin="round"
+    filter="url(#neonGlow)"
+  />
+  <path 
+    d="M 388 184 L 446 256 L 388 328" 
     fill="none" 
-    filter="url(#softGlow)"
+    stroke="#ffffff" 
+    stroke-width="8" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    opacity="0.9"
   />
 
-  <!-- Central Monogram "K" (Khiêm) -->
-  <!-- 1. K Vertical Stem -->
-  <rect 
-    x="184" 
-    y="140" 
-    width="38" 
-    height="232" 
-    rx="19" 
-    fill="url(#stemGrad)" 
-    filter="url(#softGlow)" 
-  />
+  <!-- ================= MONOGRAM 'K' CORE ================= -->
 
-  <!-- 2. K Lower Diagonal Leg (Cyber Blue / Cyan) -->
-  <path 
-    d="M 205 244 L 312 364 C 318 371 328 373 336 368 C 344 362 346 351 340 343 L 244 235 Z" 
-    fill="url(#cyanGrad)" 
-  />
+  <!-- K Vertical Tech Pillar -->
+  <g filter="url(#neonGlow)">
+    <!-- Base Shadow Layer -->
+    <rect x="174" y="120" width="46" height="272" rx="23" fill="#0369a1" />
+    <!-- Main Gradient Body -->
+    <rect x="172" y="118" width="46" height="272" rx="23" fill="url(#pillarGrad)" />
+    <!-- Glossy Core Light Strip -->
+    <rect x="187" y="132" width="16" height="244" rx="8" fill="#ffffff" opacity="0.75" />
+  </g>
 
-  <!-- 3. K Upper Diagonal Arm (Ascending to Gold Star) -->
-  <path 
-    d="M 203 260 L 298 155 C 304 148 315 147 322 153 C 330 159 331 170 324 178 L 240 272 Z" 
-    fill="url(#goldGrad)" 
-  />
-
-  <!-- Champion Star / Spark at Apex (Quán quân Quốc gia 2025) -->
-  <g transform="translate(325, 135)" filter="url(#starGlow)">
-    <!-- 4-point Diamond Star -->
+  <!-- K Lower Cyber Arm (Diagonal Down-Right) -->
+  <g filter="url(#neonGlow)">
     <path 
-      d="M 0 -38 Q 4 -8 38 0 Q 4 8 0 38 Q -4 8 -38 0 Q -4 -8 0 -38 Z" 
-      fill="url(#goldGrad)" 
+      d="M 200 248 L 316 376 C 324 385 338 387 348 379 C 358 371 360 357 351 347 L 246 230 Z" 
+      fill="url(#cyberNeon)" 
     />
-    <!-- Center white core spark -->
+    <!-- Highlight Reflection on lower arm edge -->
+    <path 
+      d="M 218 248 L 328 368" 
+      stroke="#00f5ff" 
+      stroke-width="8" 
+      stroke-linecap="round" 
+      opacity="0.95" 
+    />
+    <path 
+      d="M 226 252 L 322 358" 
+      stroke="#ffffff" 
+      stroke-width="3" 
+      stroke-linecap="round" 
+      opacity="0.9" 
+    />
+  </g>
+
+  <!-- K Upper Champion Arm (Diagonal Up-Right Soaring Ray) -->
+  <g filter="url(#neonGlow)">
+    <path 
+      d="M 198 266 L 306 142 C 314 133 328 131 338 139 C 347 147 348 161 340 170 L 246 280 Z" 
+      fill="url(#championGold)" 
+    />
+    <!-- Specular Blade Edge on upper arm -->
+    <path 
+      d="M 212 258 L 322 148" 
+      stroke="#fef08a" 
+      stroke-width="8" 
+      stroke-linecap="round" 
+    />
+    <path 
+      d="M 218 254 L 316 154" 
+      stroke="#ffffff" 
+      stroke-width="3" 
+      stroke-linecap="round" 
+    />
+  </g>
+
+  <!-- Central Quantum Energy Nexus (K Intersection Node) -->
+  <g transform="translate(216, 256)">
+    <circle cx="0" cy="0" r="18" fill="#0369a1" opacity="0.5" />
+    <circle cx="0" cy="0" r="13" fill="#00f5ff" filter="url(#neonGlow)" />
     <circle cx="0" cy="0" r="7" fill="#ffffff" />
   </g>
 
-  <!-- Mini Tech Accent Dot at Center Joint -->
-  <circle cx="218" cy="256" r="8" fill="#38bdf8" />
+  <!-- ================= RADIANT CHAMPION STAR ================= -->
+  <!-- 4-Pointed Apex Star at the Crest of the Gold Arm -->
+  <g transform="translate(348, 128)" filter="url(#starFlare)">
+    <!-- Outer Star Glow Halo -->
+    <circle cx="0" cy="0" r="28" fill="#f59e0b" opacity="0.3" />
+    
+    <!-- Star Rays (4-point Diamond Flare) -->
+    <path 
+      d="M 0 -44 Q 5 -9 44 0 Q 5 9 0 44 Q -5 9 -44 0 Q -5 -9 0 -44 Z" 
+      fill="url(#championGold)" 
+    />
+    
+    <!-- Secondary Diagonal Micro Rays -->
+    <path 
+      d="M 0 -22 Q 3 -4 22 0 Q 3 4 0 22 Q -3 4 -22 0 Q -3 -4 0 -22 Z" 
+      fill="#ffffff" 
+      transform="rotate(45)"
+      opacity="0.7"
+    />
+    
+    <!-- Brilliant Center Gem Core -->
+    <circle cx="0" cy="0" r="10" fill="#ffffff" />
+    <circle cx="-2" cy="-2" r="3" fill="#fef08a" />
+  </g>
+
+  <!-- Mini Sparkle at Upper Left for Balance -->
+  <g transform="translate(140, 96)" opacity="0.75" filter="url(#starFlare)">
+    <path d="M 0 -14 Q 2 -3 14 0 Q 2 3 0 14 Q -2 3 -14 0 Q -2 -3 0 -14 Z" fill="#38bdf8" />
+    <circle cx="0" cy="0" r="3" fill="#ffffff" />
+  </g>
 </svg>

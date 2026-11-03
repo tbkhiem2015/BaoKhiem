@@ -3,6 +3,8 @@ import Navbar from './components/Navbar';
 import ProjectCard from './components/ProjectCard';
 import ProjectDocModal from './components/ProjectDocModal';
 import AwardModal from './components/AwardModal';
+import AchievementRow from './components/AchievementRow';
+import CertificateRow from './components/CertificateRow';
 import BrandLogo from './components/BrandLogo';
 import LogoModal from './components/LogoModal';
 import { 
@@ -53,7 +55,7 @@ const App: React.FC = () => {
   const [isDocModalOpen, setIsDocModalOpen] = useState(false);
 
   // Awards / Khen thưởng state
-  const [awardLevelFilter, setAwardLevelFilter] = useState<'all' | 'national' | 'regional' | 'provincial'>('all');
+  const [awardLevelFilter, setAwardLevelFilter] = useState<'all' | 'national' | 'regional' | 'provincial' | 'school'>('all');
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
   const [isCertModalOpen, setIsCertModalOpen] = useState(false);
   const [copiedCertId, setCopiedCertId] = useState<string | null>(null);
@@ -146,10 +148,10 @@ const App: React.FC = () => {
 
   const t = UI_TRANSLATIONS[lang];
 
-  const filteredCertificates = CERTIFICATES.filter((cert) => {
-    if (awardLevelFilter === 'all') return true;
-    return cert.badgeType === awardLevelFilter;
-  });
+  const nationalCerts = CERTIFICATES.filter(c => c.badgeType === 'national');
+  const regionalCerts = CERTIFICATES.filter(c => c.badgeType === 'regional');
+  const provincialCerts = CERTIFICATES.filter(c => c.badgeType === 'provincial' || c.badgeType === 'city');
+  const schoolCerts = CERTIFICATES.filter(c => c.badgeType === 'school' || c.badgeType === 'academic');
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-800">
@@ -310,147 +312,63 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-12">
+          <div className="space-y-6 max-w-5xl mx-auto">
             {/* BẢNG VÀNG 2026 */}
             {(yearFilter === 'all' || yearFilter === '2026') && (
-              <div className="bg-gradient-to-br from-indigo-50/60 via-white to-blue-50/40 p-6 sm:p-10 rounded-[3rem] border border-indigo-100/80 shadow-sm">
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+              <div className="bg-white/85 p-4 sm:p-6 rounded-3xl border border-indigo-100/90 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-indigo-50">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                      <Trophy className="w-6 h-6" />
+                    <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-200 shrink-0">
+                      <Trophy className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
                           {t.achievements.board2026Title}
                         </h3>
-                        <span className="px-2.5 py-0.5 bg-indigo-600 text-white text-[11px] font-black rounded-full uppercase tracking-wider animate-pulse">
+                        <span className="px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-black rounded-full uppercase tracking-wider animate-pulse">
                           {t.achievements.latestTag}
                         </span>
                       </div>
-                      <p className="text-slate-500 text-sm font-medium">Hội thi Tin Học Trẻ Toàn Quốc & Khu vực 2026</p>
+                      <p className="text-slate-500 text-xs sm:text-sm font-medium">Hội thi Tin Học Trẻ Toàn Quốc & Khu vực 2026</p>
                     </div>
                   </div>
-                  <span className="px-4 py-1.5 bg-indigo-100 text-indigo-800 font-black rounded-full text-xs">
-                    Năm 2026
+                  <span className="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold rounded-full text-xs border border-indigo-100">
+                    5 {lang === 'vi' ? 'thành tích' : 'awards'}
                   </span>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {ACHIEVEMENTS.filter(item => item.year === '2026').map((item) => {
-                    const isFirstPrize = item.id.includes('d2-tinh');
-                    const isThirdPrize = item.id.includes('d2-kk');
-                    return (
-                      <div 
-                        key={item.id} 
-                        className={`p-7 sm:p-8 bg-white border-2 rounded-[2.5rem] shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden flex flex-col justify-between ${
-                          isFirstPrize 
-                            ? 'border-amber-300/80 ring-1 ring-amber-200/50' 
-                            : isThirdPrize
-                            ? 'border-orange-300/80 ring-1 ring-orange-200/50'
-                            : 'border-indigo-100 hover:border-indigo-300'
-                        }`}
-                      >
-                        <Trophy className="absolute -bottom-6 -right-6 w-32 h-32 text-indigo-50/70 group-hover:text-indigo-100/70 transition-colors pointer-events-none" />
-                        
-                        <div>
-                          <div className="flex justify-between items-start gap-3 mb-5">
-                            <div className="flex items-center gap-3">
-                              <Award className={`w-12 h-12 p-2.5 rounded-2xl group-hover:scale-110 transition-transform ${
-                                isFirstPrize 
-                                  ? 'text-amber-600 bg-amber-50' 
-                                  : isThirdPrize
-                                  ? 'text-orange-600 bg-orange-50'
-                                  : 'text-indigo-600 bg-indigo-50'
-                              }`} />
-                              <div>
-                                <span className={`inline-block px-3 py-0.5 font-black rounded-lg text-xs uppercase tracking-wider ${
-                                  isFirstPrize 
-                                    ? 'bg-amber-600 text-white' 
-                                    : isThirdPrize
-                                    ? 'bg-orange-600 text-white'
-                                    : 'bg-indigo-600 text-white'
-                                }`}>
-                                  {item.category}
-                                </span>
-                                <span className="block text-[11px] font-bold text-slate-400 mt-0.5">
-                                  {getLocalizedText(item.badge, lang)}
-                                </span>
-                              </div>
-                            </div>
-                            <span className="px-3.5 py-1 bg-slate-100 text-slate-700 font-black rounded-full text-xs">
-                              {item.year}
-                            </span>
-                          </div>
-
-                          <h4 className="text-xl font-black text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors leading-snug">
-                            {getLocalizedText(item.title, lang)}
-                          </h4>
-                          <p className="text-slate-600 text-sm font-medium relative z-10 leading-relaxed mb-4">
-                            {getLocalizedText(item.description, lang)}
-                          </p>
-                        </div>
-
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400">
-                          <span>Tin Học Trẻ 2026</span>
-                          <span className="text-indigo-600 group-hover:translate-x-1 transition-transform">★</span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="flex flex-col gap-2.5">
+                  {ACHIEVEMENTS.filter(item => item.year === '2026').map((item) => (
+                    <AchievementRow key={item.id} item={item} lang={lang} />
+                  ))}
                 </div>
               </div>
             )}
 
             {/* BẢNG VÀNG 2025 */}
             {(yearFilter === 'all' || yearFilter === '2025') && (
-              <div className="bg-gradient-to-br from-amber-50/50 via-white to-slate-50/60 p-6 sm:p-10 rounded-[3rem] border border-amber-100 shadow-sm">
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+              <div className="bg-white/85 p-4 sm:p-6 rounded-3xl border border-amber-100/90 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-amber-50">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-amber-200">
-                      <Award className="w-6 h-6" />
+                    <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-amber-200 shrink-0">
+                      <Award className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                      <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
                         {t.achievements.board2025Title}
                       </h3>
-                      <p className="text-slate-500 text-sm font-medium">Hội thi Tin Học Trẻ Toàn Quốc & Thành tích học tập</p>
+                      <p className="text-slate-500 text-xs sm:text-sm font-medium">Hội thi Tin Học Trẻ Toàn Quốc & Thành tích học tập</p>
                     </div>
                   </div>
-                  <span className="px-4 py-1.5 bg-amber-100 text-amber-800 font-black rounded-full text-xs">
-                    Năm 2025
+                  <span className="px-3 py-1 bg-amber-50 text-amber-800 font-bold rounded-full text-xs border border-amber-100">
+                    9 {lang === 'vi' ? 'thành tích' : 'awards'}
                   </span>
                 </div>
 
-                <div className="grid lg:grid-cols-2 gap-8">
+                <div className="flex flex-col gap-2.5">
                   {ACHIEVEMENTS.filter(item => item.year.includes('2025')).map((item) => (
-                    <div 
-                      key={item.id} 
-                      className="p-8 sm:p-10 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden"
-                    >
-                      <Trophy className="absolute -bottom-4 -right-4 w-32 h-32 text-slate-50 group-hover:text-amber-50 transition-colors pointer-events-none" />
-                      
-                      <div className="flex justify-between items-start mb-6">
-                        <Award className="w-12 h-12 text-yellow-600 p-2.5 bg-yellow-50 rounded-2xl group-hover:scale-110 transition-transform" />
-                        <div className="flex items-center gap-2">
-                          {item.category && (
-                            <span className="px-3 py-1 bg-amber-50 text-amber-700 font-black rounded-full text-xs">
-                              {item.category}
-                            </span>
-                          )}
-                          <span className="px-4 py-1 bg-slate-100 text-slate-700 font-black rounded-full text-xs">
-                            {item.year}
-                          </span>
-                        </div>
-                      </div>
-
-                      <h4 className="text-2xl font-black text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
-                        {getLocalizedText(item.title, lang)}
-                      </h4>
-                      <p className="text-slate-500 font-medium relative z-10 leading-relaxed">
-                        {getLocalizedText(item.description, lang)}
-                      </p>
-                    </div>
+                    <AchievementRow key={item.id} item={item} lang={lang} />
                   ))}
                 </div>
               </div>
@@ -458,53 +376,27 @@ const App: React.FC = () => {
 
             {/* BẢNG VÀNG 2024 */}
             {(yearFilter === 'all' || yearFilter === '2024') && (
-              <div className="bg-gradient-to-br from-sky-50/50 via-white to-slate-50/60 p-6 sm:p-10 rounded-[3rem] border border-sky-100 shadow-sm">
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+              <div className="bg-white/85 p-4 sm:p-6 rounded-3xl border border-sky-100/90 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-sky-50">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-sky-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
-                      <Award className="w-6 h-6" />
+                    <div className="w-10 h-10 bg-sky-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-sky-200 shrink-0">
+                      <Award className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                      <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
                         {t.achievements.board2024Title}
                       </h3>
-                      <p className="text-slate-500 text-sm font-medium">Hội thi Tin Học Trẻ Tỉnh An Giang 2024</p>
+                      <p className="text-slate-500 text-xs sm:text-sm font-medium">Hội thi Tin Học Trẻ Tỉnh An Giang 2024</p>
                     </div>
                   </div>
-                  <span className="px-4 py-1.5 bg-sky-100 text-sky-800 font-black rounded-full text-xs">
-                    Năm 2024
+                  <span className="px-3 py-1 bg-sky-50 text-sky-800 font-bold rounded-full text-xs border border-sky-100">
+                    2 {lang === 'vi' ? 'thành tích' : 'awards'}
                   </span>
                 </div>
 
-                <div className="grid lg:grid-cols-1 gap-8">
+                <div className="flex flex-col gap-2.5">
                   {ACHIEVEMENTS.filter(item => item.year === '2024').map((item) => (
-                    <div 
-                      key={item.id} 
-                      className="p-8 sm:p-10 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden"
-                    >
-                      <Trophy className="absolute -bottom-4 -right-4 w-32 h-32 text-slate-50 group-hover:text-sky-50 transition-colors pointer-events-none" />
-                      
-                      <div className="flex justify-between items-start mb-6">
-                        <Award className="w-12 h-12 text-sky-600 p-2.5 bg-sky-50 rounded-2xl group-hover:scale-110 transition-transform" />
-                        <div className="flex items-center gap-2">
-                          {item.category && (
-                            <span className="px-3 py-1 bg-sky-50 text-sky-700 font-black rounded-full text-xs">
-                              {item.category}
-                            </span>
-                          )}
-                          <span className="px-4 py-1 bg-slate-100 text-slate-700 font-black rounded-full text-xs">
-                            {item.year}
-                          </span>
-                        </div>
-                      </div>
-
-                      <h4 className="text-2xl font-black text-slate-900 mb-3 group-hover:text-sky-600 transition-colors">
-                        {getLocalizedText(item.title, lang)}
-                      </h4>
-                      <p className="text-slate-500 font-medium relative z-10 leading-relaxed max-w-3xl">
-                        {getLocalizedText(item.description, lang)}
-                      </p>
-                    </div>
+                    <AchievementRow key={item.id} item={item} lang={lang} />
                   ))}
                 </div>
               </div>
@@ -553,7 +445,7 @@ const App: React.FC = () => {
                 }`}
               >
                 <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{t.awards.tabNational}</span>
+                <span>{t.awards.tabNational} ({nationalCerts.length})</span>
               </button>
               <button
                 type="button"
@@ -565,7 +457,7 @@ const App: React.FC = () => {
                 }`}
               >
                 <Medal className="w-3.5 h-3.5 text-indigo-300" />
-                <span>{t.awards.tabRegional}</span>
+                <span>{t.awards.tabRegional} ({regionalCerts.length})</span>
               </button>
               <button
                 type="button"
@@ -577,16 +469,28 @@ const App: React.FC = () => {
                 }`}
               >
                 <Award className="w-3.5 h-3.5 text-sky-300" />
-                <span>{t.awards.tabProvincial}</span>
+                <span>{t.awards.tabProvincial} ({provincialCerts.length})</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAwardLevelFilter('school')}
+                className={`px-5 py-2.5 rounded-2xl font-bold text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5 ${
+                  awardLevelFilter === 'school'
+                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-200 scale-105'
+                    : 'bg-white text-slate-600 hover:text-emerald-600 border border-slate-200 hover:border-emerald-300'
+                }`}
+              >
+                <School className="w-3.5 h-3.5 text-emerald-300" />
+                <span>{t.awards.tabSchool} ({schoolCerts.length})</span>
               </button>
             </div>
           </div>
 
           {/* Official Certificates Showcase Banner */}
-          <div className="mb-8 p-5 bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 text-white rounded-3xl border border-blue-500/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+          <div className="max-w-5xl mx-auto mb-6 p-4 sm:p-5 bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 text-white rounded-3xl border border-blue-500/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0 shadow-inner">
-                <Trophy className="w-6 h-6 text-amber-400" />
+              <div className="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center shrink-0 shadow-inner">
+                <Trophy className="w-5 h-5 text-amber-400" />
               </div>
               <div className="text-center sm:text-left">
                 <h4 className="font-black text-sm sm:text-base text-amber-300 tracking-wide">
@@ -623,191 +527,184 @@ const App: React.FC = () => {
 
           {/* Toast Notification */}
           {batchToast && (
-            <div className="mb-6 p-3 bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 rounded-2xl text-xs font-bold text-center animate-fadeIn">
+            <div className="max-w-5xl mx-auto mb-6 p-3 bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 rounded-2xl text-xs font-bold text-center animate-fadeIn">
               {batchToast}
             </div>
           )}
 
-          {/* Certificates Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filteredCertificates.map((cert) => {
-              const isNational = cert.badgeType === 'national';
-              const isRegional = cert.badgeType === 'regional';
-              const isCopied = copiedCertId === cert.id;
-              const certImgSrc = customCertImages[cert.id] || cert.imageUrl;
-
-              return (
-                <div
-                  key={cert.id}
-                  className={`relative p-7 sm:p-8 bg-white rounded-[2.5rem] border-2 shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group overflow-hidden ${
-                    isNational
-                      ? 'border-amber-300/90 ring-1 ring-amber-200/60 bg-gradient-to-b from-amber-50/30 to-white'
-                      : isRegional
-                      ? 'border-indigo-200 ring-1 ring-indigo-100 bg-gradient-to-b from-indigo-50/30 to-white'
-                      : 'border-slate-200 hover:border-blue-300 bg-gradient-to-b from-slate-50/40 to-white'
-                  }`}
-                >
-                  {/* Decorative background watermark */}
-                  <Award className="absolute -bottom-6 -right-6 w-36 h-36 text-slate-100 group-hover:text-amber-100/60 transition-colors pointer-events-none" />
-
-                  <div>
-                    {/* Header: Format Badge <Bảng thi>-<Năm>-<Cấp thi> & Level Badge */}
-                    <div className="flex flex-col gap-2.5 mb-5">
-                      <div className="flex items-center justify-between gap-2 flex-wrap">
-                        {/* The Key Format Label: <Bảng thi>-<Năm>-<Cấp thi> */}
-                        <div className="flex items-center gap-1.5 bg-slate-900 text-white px-3 py-1.5 rounded-xl shadow-sm">
-                          <FileCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                          <code className="text-xs font-mono font-black tracking-wide">
-                            {cert.code}
-                          </code>
-                        </div>
-
-                        {/* Level badge */}
-                        <span className={`text-[10px] font-black uppercase px-2.5 py-1 rounded-full ${
-                          isNational
-                            ? 'bg-red-100 text-red-700 border border-red-200'
-                            : isRegional
-                            ? 'bg-indigo-100 text-indigo-700 border border-indigo-200'
-                            : 'bg-sky-100 text-sky-700 border border-sky-200'
-                        }`}>
-                          {cert.level[lang]}
-                        </span>
-                        {/* Official Certificate Badge */}
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1 shadow-xs">
-                          <Camera className="w-3 h-3 text-emerald-600" />
-                          <span>{lang === 'vi' ? 'Bằng khen thực tế' : 'Real Certificate'}</span>
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between text-xs font-bold text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                          <span>{t.awards.division}: {cert.division}</span>
-                        </span>
-                        <span>{t.awards.year}: {cert.year}</span>
-                      </div>
+          {/* Level Sections Container (Matching Bảng Vàng layout) */}
+          <div className="space-y-6 max-w-5xl mx-auto">
+            {/* SECTION 1: CẤP QUỐC GIA */}
+            {(awardLevelFilter === 'all' || awardLevelFilter === 'national') && nationalCerts.length > 0 && (
+              <div className="bg-white/85 p-4 sm:p-6 rounded-3xl border border-red-100/90 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-red-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-rose-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-red-200 shrink-0">
+                      <Trophy className="w-5 h-5 text-amber-300 fill-amber-300" />
                     </div>
-
-                    {/* Certificate Real Photo Card Preview */}
-                    <div 
-                      onClick={() => handleOpenCertModal(cert)}
-                      className="relative mb-5 rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-900 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group/img"
-                    >
-                      {/* Image element with onError fallback */}
-                      <img 
-                        src={certImgSrc} 
-                        alt={getLocalizedText(cert.awardTitle, lang)}
-                        onError={(e) => {
-                          (e.target as HTMLElement).style.display = 'none';
-                          const fallback = (e.target as HTMLElement).nextElementSibling;
-                          if (fallback) (fallback as HTMLElement).style.display = 'flex';
-                        }}
-                        className="w-full h-44 object-cover object-center transition-transform duration-300 group-hover/img:scale-105"
-                        loading="lazy"
-                      />
-
-                      {/* Fallback frame if image is loading or unavailable */}
-                      <div 
-                        style={{ display: 'none' }}
-                        className="w-full h-44 bg-gradient-to-br from-amber-50 via-white to-amber-100/60 p-4 flex-col justify-between text-slate-900 border-4 border-double border-amber-600/60 rounded-xl"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="px-2 py-0.5 bg-amber-600 text-white rounded text-[10px] font-black uppercase tracking-wider">
-                            {isNational ? 'BẰNG KHEN' : isRegional ? 'CHỨNG NHẬN' : 'GIẤY KHEN'}
-                          </span>
-                          <span className="text-[10px] font-bold text-slate-500">{cert.year}</span>
-                        </div>
-                        <div className="my-auto text-center px-2">
-                          <p className="text-xs font-black text-amber-950 uppercase line-clamp-2">
-                            {getLocalizedText(cert.awardTitle, lang)}
-                          </p>
-                          <p className="text-[11px] font-bold text-slate-700 mt-1">
-                            TRẦN BẢO KHIÊM
-                          </p>
-                        </div>
-                        <div className="flex items-center justify-between text-[10px] text-slate-600 font-bold border-t border-amber-200/80 pt-1">
-                          <span className="text-amber-800">{cert.division}</span>
-                          <span className="text-blue-600 font-black">{lang === 'vi' ? 'Bấm xem phóng to' : 'Click to inspect'}</span>
-                        </div>
-                      </div>
-
-                      {/* Overlay Bar */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end justify-between p-3 opacity-90 group-hover/img:opacity-100 transition-opacity">
-                        <span className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-blue-600 text-white flex items-center gap-1 shadow-sm">
-                          <Eye className="w-3 h-3" />
-                          <span>{lang === 'vi' ? 'Xem ảnh bằng khen' : 'View Certificate'}</span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                          {lang === 'vi' ? 'Bằng Khen & Huy Hiệu Cấp Quốc Gia' : 'National Level Certificates & Merits'}
+                        </h3>
+                        <span className="px-2 py-0.5 bg-red-600 text-white text-[10px] font-black rounded-full uppercase tracking-wider">
+                          {lang === 'vi' ? 'Quốc Gia' : 'National'}
                         </span>
-                        {cert.decisionNo ? (
-                          <span className="text-[10px] font-mono text-amber-300 font-bold bg-slate-950/90 px-2 py-0.5 rounded border border-amber-500/40">
-                            {cert.decisionNo}
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-bold text-slate-300 bg-slate-900/80 px-2 py-0.5 rounded">
-                            {cert.date || cert.year}
-                          </span>
-                        )}
                       </div>
-                    </div>
-
-                    {/* Award Title */}
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-amber-700 transition-colors leading-snug mb-3">
-                      {getLocalizedText(cert.awardTitle, lang)}
-                    </h3>
-
-                    {/* Issuer */}
-                    <div className="mb-4 p-3 bg-amber-50/70 rounded-xl border border-amber-200/70 text-xs font-bold text-amber-950 flex items-start gap-2">
-                      <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                      <div>
-                        <span className="block text-[10px] text-amber-700 uppercase tracking-wider">{t.awards.issuer}:</span>
-                        <span>{getLocalizedText(cert.issuer, lang)}</span>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    {cert.description && (
-                      <p className="text-slate-600 text-sm font-medium leading-relaxed mb-6">
-                        {getLocalizedText(cert.description, lang)}
+                      <p className="text-slate-500 text-xs sm:text-sm font-medium">
+                        {lang === 'vi' ? 'Bộ GD&ĐT, Đại học Quốc gia TP.HCM & Trung ương Đoàn TNCS Hồ Chí Minh' : 'Ministry of Education, VNU-HCM & Central Youth Union'}
                       </p>
-                    )}
+                    </div>
                   </div>
-
-                  {/* Actions Bar */}
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 z-10">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenCertModal(cert)}
-                      className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-xs font-black shadow-md shadow-amber-200/60 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <Award className="w-3.5 h-3.5" />
-                      <span>{t.awards.viewCertificate}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleCopyCode(cert.code, cert.id)}
-                      className={`px-3 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 cursor-pointer ${
-                        isCopied
-                          ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
-                          : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700'
-                      }`}
-                      title={t.awards.copyCode}
-                    >
-                      {isCopied ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>{t.awards.copied}</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5 text-slate-500" />
-                          <span>{t.awards.copyCode}</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
+                  <span className="px-3 py-1 bg-red-50 text-red-700 font-bold rounded-full text-xs border border-red-100">
+                    {nationalCerts.length} {lang === 'vi' ? 'bằng khen' : 'certificates'}
+                  </span>
                 </div>
-              );
-            })}
+
+                <div className="flex flex-col gap-2.5">
+                  {nationalCerts.map((cert) => (
+                    <CertificateRow
+                      key={cert.id}
+                      cert={cert}
+                      lang={lang}
+                      onOpenModal={handleOpenCertModal}
+                      onCopyCode={handleCopyCode}
+                      isCopied={copiedCertId === cert.id}
+                      imageSrc={customCertImages[cert.id] || cert.imageUrl}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* SECTION 2: CẤP KHU VỰC (VÒNG THI KHU VỰC MIỀN NAM) */}
+            {(awardLevelFilter === 'all' || awardLevelFilter === 'regional') && regionalCerts.length > 0 && (
+              <div className="bg-white/85 p-4 sm:p-6 rounded-3xl border border-indigo-100/90 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-indigo-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-200 shrink-0">
+                      <Medal className="w-5 h-5 text-indigo-100" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                          {lang === 'vi' ? 'Bằng Khen & Giấy Chứng Nhận Cấp Khu Vực' : 'Regional Level Certificates'}
+                        </h3>
+                        <span className="px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-black rounded-full uppercase tracking-wider">
+                          {lang === 'vi' ? 'Khu Vực' : 'Regional'}
+                        </span>
+                      </div>
+                      <p className="text-slate-500 text-xs sm:text-sm font-medium">
+                        {lang === 'vi' ? 'Vòng thi Khu vực Miền Nam — Hội thi Tin học trẻ toàn quốc (CYTAST)' : 'Southern Regional Round — National Young Informatics Contest (CYTAST)'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold rounded-full text-xs border border-indigo-100">
+                    {regionalCerts.length} {lang === 'vi' ? 'chứng nhận' : 'certificates'}
+                  </span>
+                </div>
+
+                <div className="flex flex-col gap-2.5">
+                  {regionalCerts.map((cert) => (
+                    <CertificateRow
+                      key={cert.id}
+                      cert={cert}
+                      lang={lang}
+                      onOpenModal={handleOpenCertModal}
+                      onCopyCode={handleCopyCode}
+                      isCopied={copiedCertId === cert.id}
+                      imageSrc={customCertImages[cert.id] || cert.imageUrl}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* SECTION 3: CẤP TỈNH & THÀNH PHỐ */}
+            {(awardLevelFilter === 'all' || awardLevelFilter === 'provincial') && provincialCerts.length > 0 && (
+              <div className="bg-white/85 p-4 sm:p-6 rounded-3xl border border-sky-100/90 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-sky-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-sky-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-sky-200 shrink-0">
+                      <Award className="w-5 h-5 text-sky-100" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                          {lang === 'vi' ? 'Bằng Khen & Giấy Khen Cấp Tỉnh & Thành Phố' : 'Provincial & City Level Awards'}
+                        </h3>
+                        <span className="px-2 py-0.5 bg-sky-600 text-white text-[10px] font-black rounded-full uppercase tracking-wider">
+                          {lang === 'vi' ? 'Tỉnh & TP' : 'Province & City'}
+                        </span>
+                      </div>
+                      <p className="text-slate-500 text-xs sm:text-sm font-medium">
+                        {lang === 'vi' ? 'Tỉnh Đoàn An Giang, UBND, Sở GD&ĐT, Phòng GD&ĐT TP. Long Xuyên' : 'An Giang Provincial Youth Union, Dept of Education & Long Xuyen City'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-3 py-1 bg-sky-50 text-sky-700 font-bold rounded-full text-xs border border-sky-100">
+                    {provincialCerts.length} {lang === 'vi' ? 'giấy khen' : 'certificates'}
+                  </span>
+                </div>
+
+                <div className="flex flex-col gap-2.5">
+                  {provincialCerts.map((cert) => (
+                    <CertificateRow
+                      key={cert.id}
+                      cert={cert}
+                      lang={lang}
+                      onOpenModal={handleOpenCertModal}
+                      onCopyCode={handleCopyCode}
+                      isCopied={copiedCertId === cert.id}
+                      imageSrc={customCertImages[cert.id] || cert.imageUrl}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* SECTION 4: CẤP TRƯỜNG & HỌC TẬP */}
+            {(awardLevelFilter === 'all' || awardLevelFilter === 'school') && schoolCerts.length > 0 && (
+              <div className="bg-white/85 p-4 sm:p-6 rounded-3xl border border-emerald-100/90 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-emerald-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-emerald-200 shrink-0">
+                      <School className="w-5 h-5 text-emerald-100" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                          {lang === 'vi' ? 'Khen Thưởng Cấp Trường & Thành Tích Học Tập' : 'School Level & Academic Merits'}
+                        </h3>
+                        <span className="px-2 py-0.5 bg-emerald-600 text-white text-[10px] font-black rounded-full uppercase tracking-wider">
+                          {lang === 'vi' ? 'Cấp Trường' : 'School Level'}
+                        </span>
+                      </div>
+                      <p className="text-slate-500 text-xs sm:text-sm font-medium">
+                        {lang === 'vi' ? 'Thiết kế đồ dùng học tập, Hùng biện Tiếng Anh, Học sinh Xuất sắc' : 'Learning Tools Design, English Eloquence, Academic Excellence'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-full text-xs border border-emerald-100">
+                    {schoolCerts.length} {lang === 'vi' ? 'khen thưởng' : 'awards'}
+                  </span>
+                </div>
+
+                <div className="flex flex-col gap-2.5">
+                  {schoolCerts.map((cert) => (
+                    <CertificateRow
+                      key={cert.id}
+                      cert={cert}
+                      lang={lang}
+                      onOpenModal={handleOpenCertModal}
+                      onCopyCode={handleCopyCode}
+                      isCopied={copiedCertId === cert.id}
+                      imageSrc={customCertImages[cert.id] || cert.imageUrl}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
